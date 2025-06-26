@@ -14,7 +14,11 @@ import java.util.Date;
 @Table(name = "System_User")
 public class SystemUser {
     @Id
-    @Column(name = "System_User_Code", length = 50)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "System_User_Code", unique = true, length = 50)
     private String systemUserCode;
 
     @Column(name = "System_User_Name", nullable = false, length = 100)
