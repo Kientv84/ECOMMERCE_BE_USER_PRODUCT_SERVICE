@@ -6,7 +6,8 @@ target/
 
 # Các file cấu hình database / môi trường
 application.properties
-**/src/main/resources/db.migration
+# Bỏ qua thư mục db.migration
+src/main/resources/db.migration/
 
 ### STS ###
 .apt_generated
