@@ -19,4 +19,5 @@ public interface SystemUserService {
     //sub functions
 
      String generateCode();
+
 }

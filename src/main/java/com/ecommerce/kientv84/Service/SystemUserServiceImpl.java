@@ -2,10 +2,12 @@ package com.ecommerce.kientv84.Service;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.ecommerce.kientv84.Commons.CKConstant.CkResults;
+import com.ecommerce.kientv84.Config.SercurityConfig;
 import com.ecommerce.kientv84.Entity.SystemUser;
 import com.ecommerce.kientv84.Respone.ResponeResult;
 import com.ecommerce.kientv84.Responsitory.SystemUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,8 +19,12 @@ import java.util.Optional;
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
 
+    // Inject các bean
     @Autowired
     private SystemUserRepository systemUserRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
 
     @Override
@@ -40,9 +46,12 @@ public class SystemUserServiceImpl implements SystemUserService {
     public ResponeResult<SystemUser> createUser(SystemUser user) {
         System.out.println("Called createUser API...");
 
-
         try {
+            //Hash password
+            String hashPassword = passwordEncoder.encode(user.getSystemUserPassword());
+
             user.setSystemUserCode(generateCode());
+            user.setSystemUserPassword(hashPassword);
 
             SystemUser savedUser = systemUserRepository.save(user);
             return new ResponeResult<>(CkResults.SUCCESS, "Create user successfully!", savedUser);
@@ -93,29 +102,8 @@ public class SystemUserServiceImpl implements SystemUserService {
             if (user == null) {
                 return new ResponeResult<>(CkResults.ERROR, "Not found anny user!!!");
             } else {
-                if (updatedData.getSystemUserName() != null) {
+                if(updatedData.getSystemUserName() != null && !updatedData.getSystemUserName().equals((user.getSystemUserName()))) {
                     user.setSystemUserName(updatedData.getSystemUserName());
-                }
-                if (updatedData.getSystemUserAddress() != null) {
-                    user.setSystemUserAddress(updatedData.getSystemUserAddress());
-                }
-                if (updatedData.getSystemUserEmail() != null) {
-                    user.setSystemUserEmail(updatedData.getSystemUserEmail());
-                }
-                if (updatedData.getSystemUserPhoneNumber() != null) {
-                    user.setSystemUserPhoneNumber(updatedData.getSystemUserPhoneNumber());
-                }
-                if (updatedData.getSystemUserGender() != null) {
-                    user.setSystemUserGender(updatedData.getSystemUserGender());
-                }
-                if (updatedData.getSystemUserPassword() != null) {
-                    user.setSystemUserPassword(updatedData.getSystemUserPassword());
-                }
-                if (updatedData.getSystemUserPermission() != null) {
-                    user.setSystemUserPermission(updatedData.getSystemUserPermission());
-                }
-                if (updatedData.getStatus() != null) {
-                    user.setStatus(updatedData.getStatus());
                 }
 
                 // Thêm thông tin cập nhật

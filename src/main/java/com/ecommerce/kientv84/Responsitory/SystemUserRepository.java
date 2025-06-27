@@ -9,5 +9,5 @@ public interface SystemUserRepository extends JpaRepository<SystemUser, Long> {
 
 
     SystemUser findBySystemUserCode(String systemUserCode);
-
+    SystemUser findBySystemUserEmail(String systemUserEmail);
 }
