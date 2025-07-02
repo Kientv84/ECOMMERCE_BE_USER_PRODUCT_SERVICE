@@ -28,12 +28,12 @@ public class SystemUserServiceImpl implements SystemUserService {
 
 
     @Override
-    public ResponeResult<List<SystemUser>> getAllUser() {
+    public ResponeResult<SystemUser> getAllUser() {
 
         List<SystemUser> data = systemUserRepository.findAll();
 
         if (!data.isEmpty()) {
-            ResponeResult<List<SystemUser>> listUser = new ResponeResult<>(CkResults.SUCCESS, "Get all success !!", data);
+            ResponeResult<SystemUser> listUser = new ResponeResult(CkResults.SUCCESS, "Get all success !!", data);
             return listUser;
         } else {
 

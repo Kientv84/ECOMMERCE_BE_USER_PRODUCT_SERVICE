@@ -29,15 +29,40 @@ public class SercurityConfig {
         // dùng http để cấu hình: Cho phép/không cho phép truy cập. Bảo mật password. Tắt bật các chức năng bảo mật như CSRF, CORS...
         http
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu là API, CSRF = Cross Site Request Forgery (Giả mạo request).
+                //với REST API không dùng cookies hoặc form, CSRF không cần thiết và nên tắt để tránh lỗi khi gọi API.
+
                 //Được bật mặc định trong Spring Security, nhưng khi bạn làm REST API thì nên tắt đi.
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth //cấu hình quyền truy cập cho các URL endpoint.
-                        .requestMatchers("/system_user/**", "/authentication/**").permitAll() // cho phép gọi không cần login, Tất cả các request bắt đầu bằng /system_user/ và /auth/ sẽ được phép truy cập mà không cần login.
+                        .requestMatchers("/system_user/**", "/authentication/**",  "/system_role/**").permitAll() // cho phép gọi không cần login, Tất cả các request bắt đầu bằng /system_user/ và /auth/ sẽ được phép truy cập mà không cần login.
                         .anyRequest().authenticated() // các endpoint khác cần login, Các request khác bắt buộc phải đăng nhập (có xác thực).
                 )
 
-                .httpBasic(Customizer.withDefaults()); // có thể dùng hoặc không
+                .httpBasic(Customizer.withDefaults()); // có thể dùng hoặc không, Giúp bạn test nhanh với các công cụ như Postman (thêm header Authorization: Basic ...
 
         return http.build();
     }
 }
+
+
+// Note lưu ý: Khi sử dụng spring security thì khi start ứng dụng... ==>  spring security sẽ tự động bật mode security ==> Tự sinh ra một form đăng nhâp
+// sinh ra một password ngẫu nhiên ở console mỗi lần chạy
+
+// Câu hỏi 1: Tại sao spring security lại tự động sinh ra form đăng nhập
+// Lý do là vì nó được thiết kế để
+//1. Bảo về toàn bộ ứng dụng khỏi truy cập trái phép
+//2. Khi chưa cấu hình gì thì nó tự động hiểu chúng ta đang làm web UI
+// nên sẽ tạo form login mặt định bằng html để chúng ta login vào mới có thể thao tác được với các api
+
+// Câu hỏi số 2: Vậy tạo sao spring security lại tự động tạo ra một password
+// Lý do là vì chúng ta chưa cấu hình người dùng hoặc chưa tồn tại tk admin nào nên spring sẽ mặc định tạo 1 user tên là user
+// Và sẽ in ra một password ngẫu nhiên vào console log mỗi lần khởi động.
+
+// CÂu hỏi số 3: Tại sao spring security lại tự động chặn các request
+// Khi khi không có người dùng đăng nhập ==> sẽ chặn lại ( Lỗi 401/ 403) hoặc chuyển hướng đến form login (nếu là web app).
+// ===> nhằm bảo vệ API hoặc giao diện khỏi bị truy cập trái phép.
+
+// Khi nào cần tắt hoặc thay đổi những hành vi mặt định này
+//1. Khi thực hiện web app api trả về thuần json ( ko có HTML )
+//2. Tự handle api Login riêng (JWT, OAuth, ... ) ==> Tắt mặt định gọi form login  .formLogin(form -> form.disable()), 	Tắt luôn user/password mặc định và tự cấu hình logic
+//3. Dùng frontend riêng (React, Angular...) 	Tắt redirect và CSRF để frontend gọi API không lỗi

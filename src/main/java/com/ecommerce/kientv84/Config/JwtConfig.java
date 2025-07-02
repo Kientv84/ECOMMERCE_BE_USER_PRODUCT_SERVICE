@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
-@Component
+@Component //Anotation Component đánh dấu class này là một bean ==> Giúp cho Spring quản lý bởi spring container, tự động tạo một instance cho class đó
+// Cho phép inject vào để sử dụng @Autowired
 public class JwtConfig {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret}") //@Value("${}") ==> Dùng để gọi các config bên trong file application.properties.
     private String secret;
 
     @Value("${jwt.expiration}")
@@ -20,12 +21,12 @@ public class JwtConfig {
         return secret;
     }
 
-    public long getExpiration() {
+    public long getExpiration() { // Thời gian hết hạn
         return expiration;
     }
 
     public String getIssuer() {
-        return issuer;
+        return issuer; // tổ chức phát hành token JWT
     }
 }
 

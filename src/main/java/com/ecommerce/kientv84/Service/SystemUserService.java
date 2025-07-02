@@ -8,7 +8,7 @@ import java.util.Optional;
 
 
 public interface SystemUserService {
-    ResponeResult<List<SystemUser>> getAllUser();
+    ResponeResult<SystemUser> getAllUser();
     ResponeResult<SystemUser> createUser(SystemUser user);
     ResponeResult<SystemUser> getById(Long id);
     ResponeResult<SystemUser> getByCode(String code);

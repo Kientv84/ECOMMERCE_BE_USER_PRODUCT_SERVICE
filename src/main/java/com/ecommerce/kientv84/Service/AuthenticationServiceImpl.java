@@ -31,10 +31,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 return new LoginResponse(CkResults.ERROR, "Wrong password");
             }
 
-            // ✅ Tạo JWT token
             String token = jwtUtil.generateToken(user.getSystemUserEmail());
 
-            // ✅ Trả về LoginResponse đầy đủ
             return new LoginResponse(
                     CkResults.SUCCESS,
                     "Login successfully",

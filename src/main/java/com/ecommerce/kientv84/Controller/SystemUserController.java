@@ -22,7 +22,7 @@ public class SystemUserController {
     }
 
     @GetMapping("/getAll")
-    public ResponeResult<List<SystemUser>> getAllUser() {
+    public ResponeResult<SystemUser> getAllUser() {
         return systemUserService.getAllUser();
     }
 

@@ -32,12 +32,12 @@ public class SystemUser {
     private String systemUserGender;
 
     @Column(name = "System_User_PhoneNumber")
-    private Long systemUserPhoneNumber;
+    private String systemUserPhoneNumber;
 
     @Column(name = "System_User_Address", length = 255)
     private String systemUserAddress;
 
-    @Column(name = "System_User_Email", length = 100)
+    @Column(name = "System_User_Email",  unique = true, length = 100)
     private String systemUserEmail;
 
     @Column(name = "System_User_Roles")
@@ -46,18 +46,12 @@ public class SystemUser {
     @Column(name = "System_User_Password", nullable = false, length = 255)
     private String systemUserPassword;
 
-    @Column(name = "System_User_Permission", length = 100)
-    private String systemUserPermission;
-
     @Column(name = "Status", length = 50)
     private String status;
 
     @Lob
     @Column(name = "System_User_Avatar")
     private byte[] systemUserAvatar;
-
-    @Column(name = "System_User_ChangePassword")
-    private Boolean systemUserChangePassword = false;
 
     @Column(name = "CreateBy", length = 100)
     private String createBy;
