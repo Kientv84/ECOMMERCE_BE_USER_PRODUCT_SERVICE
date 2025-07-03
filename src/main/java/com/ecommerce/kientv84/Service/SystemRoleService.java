@@ -3,6 +3,8 @@ package com.ecommerce.kientv84.Service;
 import com.ecommerce.kientv84.Entity.SystemRole;
 import com.ecommerce.kientv84.Respone.ResponeResult;
 
+import java.util.List;
+
 public interface SystemRoleService {
 
     ResponeResult getAllRole();
@@ -11,7 +13,7 @@ public interface SystemRoleService {
 
     ResponeResult<SystemRole> createRole(SystemRole role);
 
-    ResponeResult<SystemRole> updateRole(Long id);
+    ResponeResult<SystemRole> updateRole(Long id, SystemRole updateData);
 
-    ResponeResult deleteRole();
+    ResponeResult deleteRole(List<Long> ids);
 }

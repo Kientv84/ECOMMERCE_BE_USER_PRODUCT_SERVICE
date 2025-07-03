@@ -1,10 +1,9 @@
 package com.ecommerce.kientv84.Service;
 
 import com.ecommerce.kientv84.Commons.CKConstant.CkResults;
-import com.ecommerce.kientv84.Config.JwtUtil;
+import com.ecommerce.kientv84.Config.JWT.JwtUtil;
 import com.ecommerce.kientv84.Entity.SystemUser;
 import com.ecommerce.kientv84.Respone.LoginResponse;
-import com.ecommerce.kientv84.Respone.ResponeResult;
 import com.ecommerce.kientv84.Responsitory.SystemUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

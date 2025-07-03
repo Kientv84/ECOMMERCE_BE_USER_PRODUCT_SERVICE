@@ -2,6 +2,7 @@ package com.ecommerce.kientv84.Service;
 
 import com.ecommerce.kientv84.Commons.CKConstant.CkResults;
 import com.ecommerce.kientv84.Entity.SystemRole;
+import com.ecommerce.kientv84.Entity.SystemUser;
 import com.ecommerce.kientv84.Respone.ResponeResult;
 import com.ecommerce.kientv84.Responsitory.SystemRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +63,45 @@ public class SystemRoleServiceImpl implements SystemRoleService {
 
 
     @Override
-    public ResponeResult<SystemRole> updateRole(Long id) {
-        return null;
+    public ResponeResult<SystemRole> updateRole(Long id,SystemRole updateData) {
+        try {
+            SystemRole presentRole = systemRoleRepository.findById(id).orElse(null);
+
+            if (presentRole == null) {
+                return new ResponeResult<>(CkResults.ERROR, "Not found role!");
+            } else {
+                if (presentRole.getSystemRoleName() != null && !presentRole.getSystemRoleName().equals(updateData.getSystemRoleName())) {
+                    presentRole.setSystemRoleName(updateData.getSystemRoleName());
+                }
+
+                SystemRole savedRole = systemRoleRepository.save(presentRole);
+
+                return new ResponeResult(CkResults.SUCCESS, "Save role successfully!!", savedRole);
+            }
+
+        } catch (Exception e) {
+            return new ResponeResult<>(CkResults.ERROR, "Have error!!" + e.getMessage().toString());
+        }
     }
 
     @Override
-    public ResponeResult deleteRole() {
-        return null;
+    public ResponeResult deleteRole(List<Long> ids) {
+        System.out.println("Delete API called!! ....");
+        try {
+            List<SystemRole> roles = systemRoleRepository.findAllById(ids);
+
+            if ( roles.isEmpty()) {
+                return new ResponeResult(CkResults.ERROR, "Not found any role!!");
+            } else {
+                systemRoleRepository.deleteAll(roles);
+
+                return new ResponeResult(CkResults.SUCCESS, "Delete rolle sucessfully!! with" +  roles.size() + "Role"
+                );
+            }
+
+        } catch (Exception e) {
+            return new ResponeResult(CkResults.ERROR, "Have error:" + e.getMessage().toString());
+        }
     }
 }
 

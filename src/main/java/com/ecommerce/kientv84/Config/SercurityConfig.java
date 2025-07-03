@@ -1,5 +1,7 @@
 package com.ecommerce.kientv84.Config;
 
+import com.ecommerce.kientv84.Config.JWT.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -7,11 +9,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 //@Configuration đánh dấu đây là class config để quản lý các bean
 @Configuration
 public class SercurityConfig {
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     //Anotation @Bean dùng để đánh dấu một method trả v một object để spring container nhận thấy và quản lý, dùng để custom Bean
     // Lúc này chúng ta có thể sd anotation @Autowired để inject và sử dụng
@@ -34,10 +41,10 @@ public class SercurityConfig {
                 //Được bật mặc định trong Spring Security, nhưng khi bạn làm REST API thì nên tắt đi.
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth //cấu hình quyền truy cập cho các URL endpoint.
-                        .requestMatchers("/system_user/**", "/authentication/**",  "/system_role/**").permitAll() // cho phép gọi không cần login, Tất cả các request bắt đầu bằng /system_user/ và /auth/ sẽ được phép truy cập mà không cần login.
+                        .requestMatchers( "/authentication/**").permitAll() // cho phép gọi không cần login, Tất cả các request bắt đầu bằng /system_user/ và /auth/ sẽ được phép truy cập mà không cần login.
                         .anyRequest().authenticated() // các endpoint khác cần login, Các request khác bắt buộc phải đăng nhập (có xác thực).
                 )
-
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults()); // có thể dùng hoặc không, Giúp bạn test nhanh với các công cụ như Postman (thêm header Authorization: Basic ...
 
         return http.build();

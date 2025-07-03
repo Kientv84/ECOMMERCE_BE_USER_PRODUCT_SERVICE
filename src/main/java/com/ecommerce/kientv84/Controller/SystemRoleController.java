@@ -6,6 +6,8 @@ import com.ecommerce.kientv84.Service.SystemRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController // Toàn bộ method trong class sẽ trả về json, khác @Controller ở chỗ là Controller thì được hiểu là trang web sd html
 //@RestController + @ResponseBody (ngầm) để: Tự động trả về các status theo chuẩn mà không cần quy định
 // Tự động chuyển hóa kết quả thành chuỗi json
@@ -36,4 +38,15 @@ public class SystemRoleController {
         return systemRoleService.createRole(role);
     }
 
+    @PostMapping("/update/{id}")
+    public ResponeResult<SystemRole> updateRole(@PathVariable Long id,@RequestBody SystemRole updateData) {
+        return systemRoleService.updateRole(id, updateData);
+    }
+
+    @PostMapping("/delete") //Tại sao sd post mà không dùng delete method
+    //POST là method luôn mong đợi có body. Nên khi: chọn Body → raw → JSON
+    // ==> Postman tự động gán Content-Type: application/json vào header để yêu cầu body!!!
+    public ResponeResult deleteRole(@RequestBody List<Long> ids) {
+        return systemRoleService.deleteRole(ids);
+    }
 }

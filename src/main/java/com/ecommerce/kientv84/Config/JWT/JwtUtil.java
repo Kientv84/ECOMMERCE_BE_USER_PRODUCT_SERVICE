@@ -1,4 +1,4 @@
-package com.ecommerce.kientv84.Config;
+package com.ecommerce.kientv84.Config.JWT;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
