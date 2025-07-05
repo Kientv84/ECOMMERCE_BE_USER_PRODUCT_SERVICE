@@ -1,5 +1,6 @@
 package com.ecommerce.kientv84.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,8 +41,11 @@ public class SystemUser {
     @Column(name = "System_User_Email",  unique = true, length = 100)
     private String systemUserEmail;
 
-    @Column(name = "System_User_Roles")
-    private Long systemUserRoles;
+    @ManyToOne(fetch = FetchType.LAZY) //Nhiều người dùng (SystemUser) có thể thuộc 1 vai trò (SystemRole).
+    @JsonBackReference //đánh dấu đây là phần "bị bỏ qua"
+    //FetchType.LAZY JPA sẽ không tự động truy vấn vai trò mỗi khi load SystemUser, mà chỉ lấy khi gọi getSystemRole()
+    @JoinColumn(name = "System_User_Roles") //Ánh xạ System_User_Roles của bảng System_User là foreign key đến primary key của System_Role.
+    private SystemRole systemRole;
 
     @Column(name = "System_User_Password", nullable = false, length = 255)
     private String systemUserPassword;
@@ -66,4 +70,10 @@ public class SystemUser {
     @Column(name = "UpdateDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
+
+    @OneToOne(mappedBy = "systemUser", cascade = CascadeType.ALL) // cascade = CascadeType.ALL
+    @JsonBackReference
+    // Khi thao tác user dưới db vd xóa thì employee cũng đc xóa
+    //cấu hình cascade = CascadeType.ALL, nên khi save user ==> JPA sẽ tự động gọi persist() cho employee.
+    private SystemEmployee systemEmployee;
 }

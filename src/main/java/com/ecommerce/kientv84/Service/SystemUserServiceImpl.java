@@ -138,6 +138,20 @@ public class SystemUserServiceImpl implements SystemUserService {
         }
     }
 
+    @Override
+    public ResponeResult getAllByRole(Long roleId) {
+        try {
+            List<SystemUser> users = systemUserRepository.findBySystemRole_Id(roleId);
+
+            if (!users.isEmpty()) {
+                return new ResponeResult(CkResults.SUCCESS, "Get users by role successfully", users);
+            } else {
+                return new ResponeResult(CkResults.SUCCESS, "No users found for this role", users);
+            }
+        } catch (Exception e) {
+            return new ResponeResult(CkResults.ERROR, "Error: " + e.getMessage());
+        }
+    }
 
     //sub function implements
 
@@ -152,4 +166,5 @@ public class SystemUserServiceImpl implements SystemUserService {
 
         return "GS" + code + String.format("%03d", count);
     }
+
 }

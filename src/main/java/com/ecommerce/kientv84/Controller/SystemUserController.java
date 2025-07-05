@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController //toàn bộ method trong class sẽ tự động trả về JSON
+@RestController //toàn bộ method trong class sẽ tự động trả về JSON, còn @Controller là được hiểu là trang web thuần html css
+// Trong @RestController bao gồm @ResponseBody (ngầm) ==> Sẽ tự động trả về các status vd 2xx 4xx
 @RequestMapping("/system_user")
 public class SystemUserController {
     private final SystemUserService systemUserService;
@@ -49,5 +50,10 @@ public class SystemUserController {
     @PostMapping("/delete")
     public ResponeResult<String> deleteUser( @RequestBody List<Long> ids) {
         return systemUserService.deleteUser(ids);
+    }
+
+    @GetMapping("/getAllByRole/{id}")
+    public ResponeResult getAllByRole(@PathVariable Long roleId) {
+        return systemUserService.getAllByRole(roleId);
     }
 }

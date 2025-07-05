@@ -14,7 +14,7 @@ public interface SystemUserService {
     ResponeResult<SystemUser> getByCode(String code);
     ResponeResult<SystemUser> updateUser(Long id, SystemUser updatedData);
     ResponeResult<String> deleteUser(List<Long> ids);
-
+    ResponeResult getAllByRole(Long roleId);
 
     //sub functions
 
