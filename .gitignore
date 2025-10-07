@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 # Các file cấu hình database / môi trường
-application.properties
+#application.properties
 # Bỏ qua thư mục db.migration
 #src/main/resources/db.migration/
 
