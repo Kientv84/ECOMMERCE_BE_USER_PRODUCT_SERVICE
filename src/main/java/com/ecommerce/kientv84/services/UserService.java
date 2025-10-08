@@ -1,4 +1,6 @@
 package com.ecommerce.kientv84.services;
+import com.ecommerce.kientv84.dtos.request.UserRequest;
+import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.UserEntity;
 
 
@@ -7,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
     List<UserEntity> getAllUser();
-    UserEntity createUser(UserEntity user);
+    UserResponse createUser(UserRequest user);
     UserEntity getById(Long id);
     UserEntity getByCode(String code);
     UserEntity updateUser(Long id, UserEntity updatedData);

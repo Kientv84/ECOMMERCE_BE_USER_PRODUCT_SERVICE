@@ -3,6 +3,7 @@ package com.ecommerce.kientv84.entites;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "user_entity")
 public class UserEntity {
 
@@ -55,9 +57,8 @@ public class UserEntity {
     @Column(name = "status", length = 50)
     private String status;
 
-    @Lob
     @Column(name = "user_avatar")
-    private byte[] userAvatar;
+    private String userAvatar;
 
     @Column(name = "created_by", length = 100)
     private String createdBy;

@@ -1,7 +1,13 @@
 package com.ecommerce.kientv84.services.impls;
 
+import com.ecommerce.kientv84.commons.EnumError;
+import com.ecommerce.kientv84.commons.SuccessEnum;
+import com.ecommerce.kientv84.dtos.request.UserRequest;
+import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.UserEntity;
 import com.ecommerce.kientv84.dtos.response.ResponeResult;
+import com.ecommerce.kientv84.exceptions.ServiceException;
+import com.ecommerce.kientv84.mappers.UserMapper;
 import com.ecommerce.kientv84.respositories.UserRepository;
 import com.ecommerce.kientv84.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +26,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     public List<UserEntity> getAllUser() {
@@ -27,9 +34,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
-        return null;
+    public UserResponse createUser(UserRequest user) {
+        try {
+
+            // Check trùng email
+            if (userRepository.findByUserEmail(user.getEmail()) != null) {
+                throw new ServiceException(EnumError.ACC_DATA_EXISTED, "user.email.existed");
+            }
+
+            // Tạo entity
+            UserEntity initUser = UserEntity.builder()
+                    .userName(user.getName())
+                    .status("Đã kích hoạt")
+                    .userPhoneNumber(user.getPhone())
+                    .userEmail(user.getEmail())
+                    .userPassword(user.getPassword())
+                    .build();
+
+            // Lưu DB
+            UserEntity savedUser = userRepository.save(initUser);
+
+            // Map sang response
+            return userMapper.mapToUserEntity(savedUser);
+
+        } catch (ServiceException e) {
+            // ServiceException đã custom → để handler xử lý
+            throw e;
+        }
+        catch (Exception e) {
+            // Các lỗi ngoài dự kiến
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "D006", new Object[]{e.getMessage()});
+        }
     }
+
 
     @Override
     public UserEntity getById(Long id) {

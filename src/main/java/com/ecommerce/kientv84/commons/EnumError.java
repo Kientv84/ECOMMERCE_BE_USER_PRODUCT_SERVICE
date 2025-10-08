@@ -22,8 +22,12 @@ public enum EnumError {
 
     // ========== System ==========
     ACC_S_S001("ACC-S-S001", "Redis connection failed", HttpStatus.INTERNAL_SERVER_ERROR),
-    ACC_S_S002("ACC-S-S002", "Kafka publish error", HttpStatus.INTERNAL_SERVER_ERROR);
+    ACC_S_S002("ACC-S-S002", "Kafka publish error", HttpStatus.INTERNAL_SERVER_ERROR),
 
+
+    ACC_DATA_EXISTED("ACC-DTE", "Data exit", HttpStatus.BAD_REQUEST),
+
+    INTERNAL_ERROR("ACC-S-999", "Unexpected internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     private final String code;
     private final String defaultMessage;
     private final HttpStatus httpStatus;

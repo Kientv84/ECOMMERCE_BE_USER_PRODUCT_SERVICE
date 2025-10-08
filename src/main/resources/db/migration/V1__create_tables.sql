@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS user_entity (
     role_id BIGINT,
     user_password VARCHAR(255) NOT NULL,
     status VARCHAR(50),
-    user_avatar BYTEA,
+   user_avatar VARCHAR(50),
     created_by VARCHAR(100),
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(100),

@@ -12,7 +12,7 @@ public class LoginResponse {
     private String name;
 
     public LoginResponse(int success, String message) {
-        this.success = success;
         this.message = message;
+        this.success = success;
     }
 }

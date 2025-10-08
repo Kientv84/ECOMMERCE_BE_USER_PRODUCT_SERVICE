@@ -1,5 +1,7 @@
 package com.ecommerce.kientv84.controller;
 
+import com.ecommerce.kientv84.dtos.request.UserRequest;
+import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.UserEntity;
 import com.ecommerce.kientv84.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
+    @PostMapping("/account")
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
         return  ResponseEntity.ok(userService.createUser(user));
     }
 

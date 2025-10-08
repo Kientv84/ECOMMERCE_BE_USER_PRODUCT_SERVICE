@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 //    UserEntity findByUserCode(String code);
 //
-//    UserEntity findByEmail(String email);
+    UserEntity findByUserEmail(String email);
 //
 //    List<UserEntity> findByRole_Id(Long id); //structure findBy + [Tên trường quan hệ trong Entity] + _ + [Tên trường trong Entity liên quan]
 }

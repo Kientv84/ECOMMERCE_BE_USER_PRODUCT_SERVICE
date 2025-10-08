@@ -39,7 +39,7 @@ INSERT INTO user_entity (
     '268/23 Lê Văn Việt, Tăng Nhơn Phú B, Quận 9, TP.HCM',
     'truongchikien2021@example.com',
     (SELECT id FROM role_entity WHERE role_name = 'Admin' LIMIT 1),  -- đảm bảo FK hợp lệ
-    '123',
+    '$2a$10$j0xNytrAvZkRCwf2XPzChe9bH5LsEqdyGmxsYF7GvN4WMF.C9WyNu',
     'ACTIVE',
     'admin',
     'admin'

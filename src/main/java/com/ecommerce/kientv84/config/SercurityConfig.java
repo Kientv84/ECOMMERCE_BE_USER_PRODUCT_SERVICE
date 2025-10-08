@@ -1,6 +1,7 @@
 package com.ecommerce.kientv84.config;
 
 import com.ecommerce.kientv84.config.JWT.JwtAuthenticationFilter;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 
 //@Configuration đánh dấu đây là class config để quản lý các bean
@@ -37,17 +43,30 @@ public class SercurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu là API, CSRF = Cross Site Request Forgery (Giả mạo request).
                 //với REST API không dùng cookies hoặc form, CSRF không cần thiết và nên tắt để tránh lỗi khi gọi API.
-
+                .cors(Customizer.withDefaults())
                 //Được bật mặc định trong Spring Security, nhưng khi bạn làm REST API thì nên tắt đi.
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth //cấu hình quyền truy cập cho các URL endpoint.
                         .requestMatchers( "/authentication/**").permitAll() // cho phép gọi không cần login, Tất cả các request bắt đầu bằng /system_user/ và /auth/ sẽ được phép truy cập mà không cần login.
+                        .requestMatchers("/user/account").permitAll()
                         .anyRequest().authenticated() // các endpoint khác cần login, Các request khác bắt buộc phải đăng nhập (có xác thực).
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //đảm bảo rằng filter xử lý token được thực thi trước khi Spring xác thực bằng username/password mặc định.
                 .httpBasic(Customizer.withDefaults()); // có thể dùng hoặc không, Giúp bạn test nhanh với các công cụ như Postman (thêm header Authorization: Basic ...
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
 
