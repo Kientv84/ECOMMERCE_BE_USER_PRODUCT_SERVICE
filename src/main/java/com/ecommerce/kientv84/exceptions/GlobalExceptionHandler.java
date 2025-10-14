@@ -1,5 +1,6 @@
 package com.ecommerce.kientv84.exceptions;
 
+import com.ecommerce.kientv84.commons.EnumError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -7,12 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
+@RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
     private final MessageSource messageSource;
@@ -39,23 +41,27 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Xử lý các lỗi custom từ DispatchServiceException
+     * Xử lý các lỗi custom từ ServiceException
      * (Có hỗ trợ message từ messageSource dựa trên messageCode)
      */
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<Map<String, Object>> handleDispatchServiceException(ServiceException ex) {
         Locale locale = LocaleContextHolder.getLocale();
 
+        // Lấy EnumError từ exception
+        EnumError enumError = ex.getEnumError();
+
         // Lấy message từ messageSource dựa vào messageCode
         String localizedMessage = messageSource.getMessage(
                 ex.getMessageCode(),
-                null,
+                ex.getParams(),
+                enumError.getDefaultMessage(),
                 locale
         );
 
         Map<String, Object> response = new HashMap<>();
         response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("status", enumError.getHttpStatus().value());
         response.put("errorCode", ex.getErrorCode());
         response.put("message", localizedMessage);
 

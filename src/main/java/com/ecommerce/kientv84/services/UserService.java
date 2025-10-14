@@ -1,5 +1,6 @@
 package com.ecommerce.kientv84.services;
 import com.ecommerce.kientv84.dtos.request.UserRequest;
+import com.ecommerce.kientv84.dtos.request.UserUpdateRequest;
 import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.UserEntity;
 
@@ -8,16 +9,12 @@ import java.util.List;
 
 
 public interface UserService {
-    List<UserEntity> getAllUser();
+    List<UserResponse> getAllUser();
     UserResponse createUser(UserRequest user);
-    UserEntity getById(Long id);
-    UserEntity getByCode(String code);
-    UserEntity updateUser(Long id, UserEntity updatedData);
-    Boolean deleteUser(List<Long> ids);
-    List<UserEntity> getAllByRole(Long roleId);
+    UserResponse getById(Long id);
+    UserResponse updateUser(Long id, UserUpdateRequest updatedData);
+    String deleteUser(List<Long> ids);
 
     //sub functions
-
-     String generateCode();
 
 }

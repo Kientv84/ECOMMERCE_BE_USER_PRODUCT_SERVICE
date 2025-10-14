@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component // Đánh dấu class là một component, cho phép spring quản lý bởi spring container và tự động tạo một instance cho class đó ==> cho phép inject và sử dụng
@@ -44,6 +46,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { //OncePerReq
             String token = authHeader.substring(7); // cát chuỗi từ 7 để lấy token
             try {
                 String email = jwtUtil.validateToken(token); // nếu sai sẽ throw exception
+
+                // Tạo quyền
+                var authorities = List.of(new SimpleGrantedAuthority("ADMIN"));
+                new UsernamePasswordAuthenticationToken(email, null, authorities);
 
                 // Tạo đối tượng Authentication và gán vào SecurityContextHolder
                 UsernamePasswordAuthenticationToken authToken =

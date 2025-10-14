@@ -1,9 +1,11 @@
 package com.ecommerce.kientv84.controller;
 
 import com.ecommerce.kientv84.dtos.request.UserRequest;
+import com.ecommerce.kientv84.dtos.request.UserUpdateRequest;
 import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.UserEntity;
 import com.ecommerce.kientv84.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,38 +20,30 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<UserEntity>> getAllUser() {
+    @GetMapping("/accounts")
+    public ResponseEntity<List<UserResponse>> getAllUser() {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
     @PostMapping("/account")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
+    public ResponseEntity<UserResponse> createUser( @Valid  @RequestBody UserRequest user) {
         return  ResponseEntity.ok(userService.createUser(user));
     }
 
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<UserEntity> getById(@PathVariable Long id) {
+    @GetMapping("/account/{id}")
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getById(id));
     }
 
-    @GetMapping("/getByCode/{code}")
-    public ResponseEntity<UserEntity> getById(@PathVariable String code) {
-        return ResponseEntity.ok(userService.getByCode(code));
-    }
 
-    @PostMapping("/update/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity updatedData) {
+    @PostMapping("/account/{id}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest updatedData) {
         return ResponseEntity.ok(userService.updateUser(id, updatedData));
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<Boolean> deleteUser( @RequestBody List<Long> ids) {
+    @PostMapping("/accounts")
+    public ResponseEntity<String> deleteUser( @RequestBody List<Long> ids) {
         return ResponseEntity.ok(userService.deleteUser(ids));
     }
 
-    @GetMapping("/getAllByRole/{id}")
-    public ResponseEntity<List<UserEntity>> getAllByRole(@PathVariable Long roleId) {
-        return ResponseEntity.ok(userService.getAllByRole(roleId));
-    }
 }
