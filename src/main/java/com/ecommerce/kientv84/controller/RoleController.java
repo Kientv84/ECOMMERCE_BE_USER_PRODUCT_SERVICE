@@ -16,7 +16,7 @@ import java.util.List;
 // Tự động gán Content-Type: application/json
 
 @RequiredArgsConstructor
-@RequestMapping("/role")
+@RequestMapping("/v1/api")
 public class RoleController {
 
     private final RoleService roleService;

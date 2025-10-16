@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController //toàn bộ method trong class sẽ tự động trả về JSON, còn @Controller là được hiểu là trang web thuần html css
 // Trong @RestController bao gồm @ResponseBody (ngầm) ==> Sẽ tự động trả về các status vd 2xx 4xx
-@RequestMapping("/user")
+@RequestMapping("/v1/api")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
