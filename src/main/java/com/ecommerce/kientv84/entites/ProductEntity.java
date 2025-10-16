@@ -20,13 +20,18 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator") //org.hibernate.id.UUIDGenerator để tạo ra các UUID v4 (random UUID).
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "BINARY(16)") //org.hibernate.id.UUIDGenerator để tạo ra các UUID v4 (random UUID).
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
     // ====== Thông tin chung ======
     @Column(name ="product_name", nullable = false, length = 255)
     private String productName;
+
+//    @Column(name ="product_code", nullable = false, length = 255)
+
+    @Column(name ="product_code", length = 255)
+    private String productCode;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -34,11 +39,14 @@ public class ProductEntity {
     @Column(length = 100)
     private String brand; // Gymshark, Nike, Adidas...
 
-    @Column(length = 100)
-    private String category; // Men / Women / Accessories
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",nullable = false)
+    private CategoryEntity category; // Men / Women / Accessories
 
-    @Column(name ="sub_category", length = 100)
-    private String subCategory; // T-shirt / Shorts / Sports Bra...
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_category_id")
+    private SubCategoryEntity subCategory; // T-shirt / Shorts / Sports Bra...
 
     @Column(length = 100)
     private String collection; // Apex / Vital / Legacy...

@@ -48,7 +48,7 @@ public class SercurityConfig {
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth //cấu hình quyền truy cập cho các URL endpoint.
                         .requestMatchers( "/authentication/**").permitAll() // cho phép gọi không cần login, Tất cả các request bắt đầu bằng /system_user/ và /auth/ sẽ được phép truy cập mà không cần login.
-                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/v1/api/**").permitAll()
                         .anyRequest().authenticated() // các endpoint khác cần login, Các request khác bắt buộc phải đăng nhập (có xác thực).
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //đảm bảo rằng filter xử lý token được thực thi trước khi Spring xác thực bằng username/password mặc định.

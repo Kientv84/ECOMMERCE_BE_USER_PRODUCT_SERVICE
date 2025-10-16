@@ -11,16 +11,10 @@ import java.math.BigDecimal;
 @Getter
 @AllArgsConstructor
 public class ProductUpdateRequest {
-    private String productName;
-
     private String brand;
-
     private String category;
-
     private String subCategory;
-
     private BigDecimal basePrice;
-
     private String status;
 }
 

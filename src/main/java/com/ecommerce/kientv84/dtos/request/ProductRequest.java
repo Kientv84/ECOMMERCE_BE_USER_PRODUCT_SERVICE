@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductRequest {
 
+    @NotNull(message =  "{product.productCode.notnul}")
+    private String code;
+
     @NotNull(message =  "{product.brand.notnul}")
     private String brand;
 

@@ -16,6 +16,7 @@ import com.ecommerce.kientv84.respositories.UserRepository;
 import com.ecommerce.kientv84.services.UserService;
 import jakarta.websocket.EncodeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,12 +45,12 @@ public class UserServiceImpl implements UserService {
 
             List<UserResponse> accounts = userRepository.findAll().stream().map(acc -> userMapper.mapToUserResponse(acc)).toList();
 
-            return  accounts;
+            return accounts;
 
         } catch (ServiceException e) {
             throw e;
         } catch (Exception e) {
-            throw new ServiceException(EnumError.ACC_ERR_GET,"ACC-S-999");
+            throw new ServiceException(EnumError.ACC_ERR_GET, "ACC-S-999");
         }
     }
 
@@ -61,7 +65,7 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(EnumError.ACC_DATA_EXISTED, "user.email.existed");
             }
 
-            String encodePassword = passwordEncoder.encode(user.getPassword()) ;
+            String encodePassword = passwordEncoder.encode(user.getPassword());
 
             UserEntity initUser = UserEntity.builder()
                     .userName(user.getName())
@@ -79,8 +83,7 @@ public class UserServiceImpl implements UserService {
         } catch (ServiceException e) {
 
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             throw new ServiceException(EnumError.INTERNAL_ERROR, "ACC-S-999");
         }
@@ -90,16 +93,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getById(Long id) {
         try {
-           UserEntity user =  userRepository.findById(id)
+            UserEntity user = userRepository.findById(id)
                     .orElseThrow(() -> new ServiceException(EnumError.ACC_ERR_GET, "user.not.found", new Object[]{id}));
 
-           return userMapper.mapToUserResponse(user);
-        }
-        catch (ServiceException e) {
+            return userMapper.mapToUserResponse(user);
+        } catch (ServiceException e) {
             //các lỗi business (do bạn chủ động ném ra)
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Bọc lại các lỗi hệ thống khác
             throw new ServiceException(EnumError.INTERNAL_ERROR);
         }
@@ -133,19 +134,44 @@ public class UserServiceImpl implements UserService {
     public String deleteUser(List<Long> ids) {
         try {
             if (ids == null || ids.isEmpty()) {
-                throw new ServiceException(EnumError.ACC_ERR_DEL_EM, "List ids to delete is empty!", new Object[]{});
+                throw new ServiceException(
+                        EnumError.ACC_ERR_DEL_EM,
+                        "List ids to delete is empty!",
+                        new Object[]{}
+                );
+            }
+
+            List<UserEntity> users = userRepository.findAllById(ids);
+            Set<Long> foundIds = users.stream()
+                    .map(UserEntity::getId)
+                    .collect(Collectors.toSet());
+
+            List<Long> notFoundIds = ids.stream()
+                    .filter(id -> !foundIds.contains(id))
+                    .toList();
+
+            if (!notFoundIds.isEmpty()) {
+                throw new ServiceException(
+                        EnumError.ACC_ERR_NOT_FOUND,
+                        "user.delete.notfound " + notFoundIds,
+                        new Object[]{notFoundIds.toString()}
+                );
             }
 
             userRepository.deleteAllById(ids);
+            log.info("Deleted users successfully: {}", ids);
 
-            return "xoá người dùng thành công với id" + ids.toString();
-            // hoặc ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
+            return "Deleted users successfully: {}" + ids;
         } catch (ServiceException e) {
             throw e;
         } catch (Exception e) {
-            throw new ServiceException(EnumError.INTERNAL_ERROR, "ACC-S-999", new Object[]{e.getMessage()});
+            throw new ServiceException(
+                    EnumError.INTERNAL_ERROR,
+                    "ACC-S-999",
+                    new Object[]{e.getMessage()}
+            );
         }
     }
+
 
 }

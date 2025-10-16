@@ -41,11 +41,20 @@ public enum EnumError {
     //Delete
     ACC_ERR_DEL("ACC-DL", "Have error in process delete", HttpStatus.BAD_REQUEST),
     ACC_ERR_DEL_EM("ACC-DL-E", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
-
+    ACC_ERR_NOT_FOUND("ACC_EL_NF", "Not found user with id", HttpStatus.BAD_REQUEST),
 
     //----------- PRODUCT ------------
     PRO_ERR_GET("PRO-GA", "Have error in process get", HttpStatus.BAD_REQUEST),
 
+    PRO_ERR_DEL("PRO-DL", "Have error in process delete", HttpStatus.BAD_REQUEST),
+    PRO_ERR_DEL_EM("PRO-DL-E", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
+    PRO_ERR_NOT_FOUND("PRO_EL_NF", "Not found user with id", HttpStatus.BAD_REQUEST),
+
+
+    //----------- CATEGORY ------------
+    CATE_ERR_GET("CATE-GA", "Have error in process get", HttpStatus.BAD_REQUEST),
+    CATE_ERR_DEL_EM("CATE-DL-E", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
+    CATE_DATA_EXISTED("CATE-DTE", "Data exit", HttpStatus.CONFLICT),
 
     INTERNAL_ERROR("ACC-S-999", "Unexpected internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     private final String code;
