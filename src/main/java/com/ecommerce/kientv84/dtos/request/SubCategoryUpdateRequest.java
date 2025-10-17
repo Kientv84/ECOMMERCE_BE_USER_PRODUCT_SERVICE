@@ -1,9 +1,12 @@
 package com.ecommerce.kientv84.dtos.request;
 
+import com.ecommerce.kientv84.entites.CategoryEntity;
 import com.ecommerce.kientv84.entites.SubCategoryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,5 +15,5 @@ public class SubCategoryUpdateRequest {
     public String subCategoryName;
     public String subCategoryCode;
     private String status;
-    private SubCategoryEntity category;
+    private UUID category;
 }

@@ -50,11 +50,17 @@ public enum EnumError {
     PRO_ERR_DEL_EM("PRO-DL-E", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
     PRO_ERR_NOT_FOUND("PRO_EL_NF", "Not found user with id", HttpStatus.BAD_REQUEST),
 
-
     //----------- CATEGORY ------------
     CATE_ERR_GET("CATE-GA", "Have error in process get", HttpStatus.BAD_REQUEST),
     CATE_ERR_DEL_EM("CATE-DL-E", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
     CATE_DATA_EXISTED("CATE-DTE", "Data exit", HttpStatus.CONFLICT),
+    CATE_ERR_NOT_FOUND("CATE_EL_NF", "Not found category with id", HttpStatus.BAD_REQUEST),
+
+    //-----------  SUBCATEGORY ------------
+    SUB_CATE_ERR_GET("SUB-CATE-GA", "Have error in process get", HttpStatus.BAD_REQUEST),
+    SUB_CATE_ERR_DEL_EM("SUB-CATE-GA", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
+    SUB_CATE_DATA_EXISTED("SUB-CATE-GA", "Data exit", HttpStatus.CONFLICT),
+    SUB_CATE_ERR_NOT_FOUND("SUB-CATE_NF", "Not found sub category with id", HttpStatus.BAD_REQUEST),
 
     INTERNAL_ERROR("ACC-S-999", "Unexpected internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     private final String code;

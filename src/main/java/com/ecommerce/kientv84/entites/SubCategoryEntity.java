@@ -4,6 +4,11 @@ package com.ecommerce.kientv84.entites;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +21,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "sub_category_entity")
-
+@EntityListeners(AuditingEntityListener.class)
 public class SubCategoryEntity {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -50,17 +55,21 @@ public class SubCategoryEntity {
     private List<ProductEntity> products;
 
     // ====== Metadata ======
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")
     private Date createdDate;
 
+    @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_date")
     private Date updatedDate;
 
+    @CreatedBy
     @Column(name = "created_by")
     private String createdBy;
 
+    @LastModifiedBy
     @Column(name = "updated_by")
     private String updatedBy;
 }

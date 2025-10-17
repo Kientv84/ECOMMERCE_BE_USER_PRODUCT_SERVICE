@@ -6,12 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class SubCategoryResponse {
-    public String subCategoryName;
-    public String subCategoryCode;
+    private UUID id;
+    private String subCategoryName;
+    private String subCategoryCode;
     private String status;
-    private SubCategoryEntity category;
+    private UUID categoryId;
 }

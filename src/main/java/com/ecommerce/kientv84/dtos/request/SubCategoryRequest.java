@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,5 +22,5 @@ public class SubCategoryRequest {
     private String status;
 
     @NotNull(message = "{sub.category.category.notnull}")
-    private CategoryEntity category;
+    private UUID category;
 }

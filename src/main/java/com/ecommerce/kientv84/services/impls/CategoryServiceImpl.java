@@ -118,7 +118,7 @@ public class CategoryServiceImpl implements CategoryService {
 
             if (!notFoundIds.isEmpty()) {
                 throw new ServiceException(
-                        EnumError.ACC_ERR_NOT_FOUND,
+                        EnumError.CATE_ERR_NOT_FOUND,
                         "category.delete.notfound " + notFoundIds,
                         new Object[]{notFoundIds.toString()}
                 );

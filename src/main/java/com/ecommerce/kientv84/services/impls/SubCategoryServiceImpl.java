@@ -1,38 +1,149 @@
 package com.ecommerce.kientv84.services.impls;
 
+import com.ecommerce.kientv84.commons.EnumError;
 import com.ecommerce.kientv84.dtos.request.SubCategoryRequest;
 import com.ecommerce.kientv84.dtos.request.SubCategoryUpdateRequest;
 import com.ecommerce.kientv84.dtos.response.SubCategoryResponse;
+import com.ecommerce.kientv84.entites.CategoryEntity;
+import com.ecommerce.kientv84.entites.SubCategoryEntity;
+import com.ecommerce.kientv84.exceptions.ServiceException;
+import com.ecommerce.kientv84.mappers.SubCategoryMapper;
+import com.ecommerce.kientv84.respositories.CategoryRepository;
+import com.ecommerce.kientv84.respositories.SubCategoryRepository;
 import com.ecommerce.kientv84.services.SubCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
+
+    private final SubCategoryMapper subCategoryMapper;
+    private final SubCategoryRepository subCategoryRepository;
+    private final CategoryRepository categoryRepository;
+
     @Override
     public List<SubCategoryResponse> getAllSubCategory() {
-        return List.of();
+        try {
+            List<SubCategoryResponse> responses = subCategoryRepository.findAll().stream().map(sub -> subCategoryMapper.mapToSubCategoryResponse(sub)).toList();
+
+            return responses;
+
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.SUB_CATE_ERR_GET, "sub.category.get.error");
+        }
     }
 
     @Override
-    public SubCategoryResponse crateSubCategory(SubCategoryRequest subSubCategoryRequest) {
-        return null;
+    public SubCategoryResponse createSubCategory(SubCategoryRequest request) {
+        try {
+            SubCategoryEntity entity = subCategoryRepository.findSubCategoryBySubCategoryCode(request.subCategoryCode);
+            if ( entity != null ) {
+                throw new ServiceException(EnumError.SUB_CATE_DATA_EXISTED, "sub.category.exit");
+            }
+
+            CategoryEntity category = categoryRepository.findById(request.getCategory())
+                    .orElseThrow(() -> new ServiceException(EnumError.CATE_ERR_GET, "category.get.error"));
+
+            SubCategoryEntity subCategory = SubCategoryEntity.builder()
+                    .subCategoryName(request.getSubCategoryName())
+                    .subCategoryCode(request.getSubCategoryCode())
+                    .category(category)
+                    .status(request.getStatus())
+                    .build();
+
+            subCategoryRepository.save(subCategory);
+
+            return subCategoryMapper.mapToSubCategoryResponse(subCategory);
+
+        } catch (ServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.SUB_CATE_ERR_GET, "sub.category.get.error");
+        }
     }
 
     @Override
     public SubCategoryResponse getSubCategoryById(UUID id) {
-        return null;
+
+        try {
+            SubCategoryEntity subCategory = subCategoryRepository.findById(id).orElseThrow(() -> new ServiceException(EnumError.SUB_CATE_ERR_GET, "sub.category.get.error"));
+
+            return subCategoryMapper.mapToSubCategoryResponse(subCategory);
+
+        } catch (ServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "sys.internal.error");
+        }
     }
 
     @Override
     public SubCategoryResponse updateSubCategoryById(UUID id, SubCategoryUpdateRequest updateData) {
-        return null;
+        try {
+            SubCategoryEntity subCategory = subCategoryRepository.findById(id).orElseThrow(() -> new ServiceException(EnumError.SUB_CATE_ERR_GET, "sub.category.get.error"));
+
+            if ( updateData.getSubCategoryName() != null ) {
+                subCategory.setSubCategoryName(updateData.getSubCategoryName());
+            }
+            if ( updateData.getSubCategoryCode() != null) {
+                subCategory.setSubCategoryCode(updateData.getSubCategoryCode());
+            }
+            if ( updateData.getStatus() != null ) {
+                subCategory.setStatus(updateData.getStatus());
+            }
+            if ( updateData.getCategory() != null) {
+                CategoryEntity category = categoryRepository.findById(updateData.getCategory())
+                        .orElseThrow(() -> new ServiceException(EnumError.CATE_ERR_GET, "category.get.error"));
+                subCategory.setCategory(category);
+            }
+
+            subCategoryRepository.save(subCategory);
+
+            return subCategoryMapper.mapToSubCategoryResponse(subCategory);
+
+        } catch (ServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "sys.internal.error");
+        }
     }
 
     @Override
     public String deleteSubCategories(List<UUID> ids) {
-        return "";
+
+        try {
+            if ( ids == null || ids.isEmpty()) {
+                throw new ServiceException(EnumError.SUB_CATE_ERR_DEL_EM ,"sub.category.delete.empty");
+            }
+
+            List<SubCategoryEntity> idsFound = subCategoryRepository.findAllById(ids);
+
+            Set<UUID> foundIds = idsFound.stream().map(SubCategoryEntity::getId).collect(Collectors.toSet());
+
+            List<UUID> notFoundIds = ids.stream().filter(uuid -> !foundIds.contains(uuid)).toList();
+
+            if ( !notFoundIds.isEmpty()) {
+                throw new ServiceException(
+                        EnumError.ACC_ERR_NOT_FOUND,
+                        "sub.category.delete.notfound" + notFoundIds,
+                        new Object[]{notFoundIds.toString()}
+                );
+            }
+
+            subCategoryRepository.deleteAllById(ids);
+
+            return  "Deleted sub categories successfully: {}" + ids;
+
+        } catch (ServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "sys.internal.error");
+        }
     }
 }

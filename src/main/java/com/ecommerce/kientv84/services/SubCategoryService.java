@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface SubCategoryService {
     List<SubCategoryResponse> getAllSubCategory();
 
-    SubCategoryResponse crateSubCategory(SubCategoryRequest subSubCategoryRequest);
+    SubCategoryResponse createSubCategory(SubCategoryRequest subSubCategoryRequest);
 
     SubCategoryResponse getSubCategoryById(UUID id);
 
