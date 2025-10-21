@@ -1,5 +1,6 @@
 package com.ecommerce.kientv84.dtos.response;
 
+import com.ecommerce.kientv84.entites.BrandEntity;
 import com.ecommerce.kientv84.entites.CategoryEntity;
 
 import com.ecommerce.kientv84.entites.SubCategoryEntity;
@@ -17,7 +18,7 @@ public class ProductResponse {
     private UUID id;
     private String productName;
     private String productCode;
-    private String brand;
+    private BrandEntity brand;
     private CategoryEntity category;
     private SubCategoryEntity subCategory;
     private BigDecimal basePrice;

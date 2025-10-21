@@ -48,7 +48,7 @@ public class ProductServiceImp implements ProductService {
 
 
             ProductEntity productEntity = ProductEntity.builder()
-                    .brand(productRequest.getBrand())
+//                    .brand(productRequest.getBrand())
 //                    .category(productRequest.getCategory())
                     .productCode(productRequest.getCode())
 //                    .subCategory(productRequest.getSubCategory())
@@ -152,7 +152,7 @@ public class ProductServiceImp implements ProductService {
             if (!notFoundIds.isEmpty()) {
                 throw new ServiceException(
                         EnumError.PRO_ERR_NOT_FOUND,
-                        "product.delete.notfound " + notFoundIds,
+                        "product.delete.notfound" + notFoundIds,
                         new Object[]{notFoundIds.toString()}
                 );
             }
@@ -169,11 +169,12 @@ public class ProductServiceImp implements ProductService {
     // SUB FUNCTION
     @Override
     public String generateNameProduct(ProductEntity productEntity) {
-        return String.format("%s %s %s",
-                productEntity.getBrand().trim()
-//                productEntity.getCategory().trim(),
-//                productEntity.getSubCategory().trim()
-        ).trim();
+        return null;
+//        return String.format("%s %s %s",
+////                productEntity.getBrand().trim()
+////                productEntity.getCategory().trim(),
+////                productEntity.getSubCategory().trim()
+//        ).trim();
     }
 
 }

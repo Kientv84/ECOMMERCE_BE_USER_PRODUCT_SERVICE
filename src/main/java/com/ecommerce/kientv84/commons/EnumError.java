@@ -62,6 +62,13 @@ public enum EnumError {
     SUB_CATE_DATA_EXISTED("SUB-CATE-GA", "Data exit", HttpStatus.CONFLICT),
     SUB_CATE_ERR_NOT_FOUND("SUB-CATE_NF", "Not found sub category with id", HttpStatus.BAD_REQUEST),
 
+    //----------- BRAND ------------
+    BRAND_ERR_GET("BRAND-GA", "Have error in process get brand", HttpStatus.BAD_REQUEST),
+    BRAND_ERR_DEL_EM("BRAND-DL-E", "List ids of brand to delete is empty", HttpStatus.BAD_REQUEST),
+    BRAND_DATA_EXISTED("BRAND-DTE", "Data brand exit", HttpStatus.CONFLICT),
+    BRAND_ERR_NOT_FOUND("BRAND", "Not found brand with id", HttpStatus.BAD_REQUEST),
+
+
     INTERNAL_ERROR("ACC-S-999", "Unexpected internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     private final String code;
     private final String defaultMessage;
