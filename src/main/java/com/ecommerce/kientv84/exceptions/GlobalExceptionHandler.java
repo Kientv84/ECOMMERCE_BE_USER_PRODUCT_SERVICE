@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Xử lý các lỗi custom từ ServiceException
+     * Xử lý các lỗi custom từ Service\Exception
      * (Có hỗ trợ message từ messageSource dựa trên messageCode)
      */
     @ExceptionHandler(ServiceException.class)

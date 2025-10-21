@@ -36,8 +36,9 @@ public class ProductEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(length = 100)
-    private String brand; // Gymshark, Nike, Adidas...
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id",nullable = false)
+    private BrandEntity brand; // Gymshark, Nike, Adidas...
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",nullable = false)
