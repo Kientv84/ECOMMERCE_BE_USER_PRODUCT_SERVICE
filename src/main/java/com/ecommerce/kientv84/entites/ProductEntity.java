@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,6 +21,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "product_entity")
+@EntityListeners(AuditingEntityListener.class)
 public class ProductEntity {
 
     @Id
@@ -80,17 +86,21 @@ public class ProductEntity {
     private Integer ratingCount; // Số lượng review
 
     // ====== Metadata ======
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name ="create_date")
     private Date createdDate;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name ="update_date")
     private Date updatedDate;
 
+    @CreatedBy
     @Column(name ="created_by")
     private String createdBy;
 
+    @LastModifiedBy
     @Column(name ="updated_by")
     private String updatedBy;
 

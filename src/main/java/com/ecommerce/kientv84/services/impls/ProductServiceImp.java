@@ -5,10 +5,16 @@ import com.ecommerce.kientv84.commons.StatusEnum;
 import com.ecommerce.kientv84.dtos.request.ProductRequest;
 import com.ecommerce.kientv84.dtos.request.ProductUpdateRequest;
 import com.ecommerce.kientv84.dtos.response.ProductResponse;
+import com.ecommerce.kientv84.entites.BrandEntity;
+import com.ecommerce.kientv84.entites.CategoryEntity;
 import com.ecommerce.kientv84.entites.ProductEntity;
+import com.ecommerce.kientv84.entites.SubCategoryEntity;
 import com.ecommerce.kientv84.exceptions.ServiceException;
 import com.ecommerce.kientv84.mappers.ProductMapper;
+import com.ecommerce.kientv84.respositories.BrandRepository;
+import com.ecommerce.kientv84.respositories.CategoryRepository;
 import com.ecommerce.kientv84.respositories.ProductRepository;
+import com.ecommerce.kientv84.respositories.SubCategoryRepository;
 import com.ecommerce.kientv84.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +31,9 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImp implements ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
+    private final BrandRepository brandRepository;
     private final ProductMapper productMapper;
 
     @Override
@@ -45,13 +54,20 @@ public class ProductServiceImp implements ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
         try {
 
+            CategoryEntity category = categoryRepository.findById(productRequest.getCategory())
+                    .orElseThrow(() -> new ServiceException(EnumError.CATE_ERR_GET, "category.get.error"));
 
+            SubCategoryEntity subCategory = subCategoryRepository.findById(productRequest.getSubCategory())
+                    .orElseThrow(() -> new ServiceException(EnumError.SUB_CATE_ERR_GET, "sub.category.get.error"));
+
+            BrandEntity brand = brandRepository.findById(productRequest.getBrand())
+                    .orElseThrow(() -> new ServiceException(EnumError.BRAND_ERR_GET, "brand.get.error"));
 
             ProductEntity productEntity = ProductEntity.builder()
-//                    .brand(productRequest.getBrand())
-//                    .category(productRequest.getCategory())
+                    .brand(brand)
+                    .category(category)
                     .productCode(productRequest.getCode())
-//                    .subCategory(productRequest.getSubCategory())
+                    .subCategory(subCategory)
                     .basePrice(productRequest.getBasePrice())
                     .status(productRequest.getStatus())
                     .createdBy("ADMIN")
@@ -101,13 +117,19 @@ public class ProductServiceImp implements ProductService {
                productEntity.setBrand(productEntity.getBrand());
            }
             if ( updateData.getCategory() != null) {
-                productEntity.setCategory(productEntity.getCategory());
+                CategoryEntity category = categoryRepository.findById(updateData.getCategory())
+                        .orElseThrow(() -> new ServiceException(EnumError.CATE_ERR_GET, "category.get.error"));
+                productEntity.setCategory(category);
             }
             if ( updateData.getSubCategory() != null) {
-                productEntity.setSubCategory(productEntity.getSubCategory());
+                SubCategoryEntity subCategory = subCategoryRepository.findById(updateData.getSubCategory())
+                        .orElseThrow(() -> new ServiceException(EnumError.SUB_CATE_ERR_GET, "sub.category.get.error"));
+                productEntity.setSubCategory(subCategory);
             }
             if ( updateData.getBasePrice() != null) {
-                productEntity.setBasePrice(productEntity.getBasePrice());
+                BrandEntity brand = brandRepository.findById(updateData.getBrand())
+                        .orElseThrow(() -> new ServiceException(EnumError.BRAND_ERR_GET, "brand.get.error"));
+                productEntity.setBrand(brand);
             }
             if ( updateData.getStatus() != null) {
                 productEntity.setStatus(productEntity.getStatus());
@@ -169,12 +191,11 @@ public class ProductServiceImp implements ProductService {
     // SUB FUNCTION
     @Override
     public String generateNameProduct(ProductEntity productEntity) {
-        return null;
-//        return String.format("%s %s %s",
-////                productEntity.getBrand().trim()
-////                productEntity.getCategory().trim(),
-////                productEntity.getSubCategory().trim()
-//        ).trim();
+        return String.format("%s %s %s",
+                productEntity.getBrand().getBrandName().trim(),
+                productEntity.getCategory().getCategoryName().trim(),
+                productEntity.getSubCategory().getSubCategoryCode().trim()
+        ).trim();
     }
 
 }

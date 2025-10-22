@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -16,13 +17,13 @@ public class ProductRequest {
     private String code;
 
     @NotNull(message =  "{product.brand.notnul}")
-    private String brand;
+    private UUID brand;
 
     @NotNull(message =  "{product.category.notnul}")
-    private String category;
+    private UUID category;
 
     @NotNull(message =  "{product.subCategory.notnul}")
-    private String subCategory;
+    private UUID subCategory;
 
     @NotNull(message =  "{product.basePrice.notnul}")
     private BigDecimal basePrice;

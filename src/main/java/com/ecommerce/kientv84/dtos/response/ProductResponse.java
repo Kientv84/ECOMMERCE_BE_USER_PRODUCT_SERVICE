@@ -18,9 +18,9 @@ public class ProductResponse {
     private UUID id;
     private String productName;
     private String productCode;
-    private BrandEntity brand;
-    private CategoryEntity category;
-    private SubCategoryEntity subCategory;
+    private UUID brand;
+    private UUID category;
+    private UUID subCategory;
     private BigDecimal basePrice;
     private String status;
 }
