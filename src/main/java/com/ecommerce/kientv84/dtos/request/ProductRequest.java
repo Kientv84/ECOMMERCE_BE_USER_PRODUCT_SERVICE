@@ -19,15 +19,35 @@ public class ProductRequest {
     @NotNull(message =  "{product.brand.notnul}")
     private UUID brand;
 
-    @NotNull(message =  "{product.category.notnul}")
+    @NotNull(message =  "{product.category.notnull}")
     private UUID category;
 
-    @NotNull(message =  "{product.subCategory.notnul}")
+    @NotNull(message =  "{product.subCategory.notnull}")
     private UUID subCategory;
 
-    @NotNull(message =  "{product.basePrice.notnul}")
+    @NotNull(message =  "{product.basePrice.notnull}")
     private BigDecimal basePrice;
 
-    @NotNull(message =  "{product.status.notnul}")
+    @NotNull(message =  "{product.status.notnull}")
     private String status;
+
+    private String description;
+
+    private String collection;
+
+    private Float discountPercent;
+
+    private String origin;
+
+    private String material;
+
+    private String fitType;
+
+    private String careInstruction;
+
+    private String thumbnailUrl;
+
+    private Double ratingAverage;
+
+    private Integer ratingCount;
 }

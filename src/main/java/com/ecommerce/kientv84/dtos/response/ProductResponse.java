@@ -23,4 +23,14 @@ public class ProductResponse {
     private UUID subCategory;
     private BigDecimal basePrice;
     private String status;
+    private String description;
+    private String collection;
+    private Float discountPercent;
+    private String origin;
+    private String material;
+    private String fitType;
+    private String careInstruction;
+    private String thumbnailUrl;
+    private Double ratingAverage;
+    private Integer ratingCount;
 }

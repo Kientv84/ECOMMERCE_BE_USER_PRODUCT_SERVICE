@@ -66,7 +66,19 @@ public enum EnumError {
     BRAND_ERR_GET("BRAND-GA", "Have error in process get brand", HttpStatus.BAD_REQUEST),
     BRAND_ERR_DEL_EM("BRAND-DL-E", "List ids of brand to delete is empty", HttpStatus.BAD_REQUEST),
     BRAND_DATA_EXISTED("BRAND-DTE", "Data brand exit", HttpStatus.CONFLICT),
-    BRAND_ERR_NOT_FOUND("BRAND", "Not found brand with id", HttpStatus.BAD_REQUEST),
+    BRAND_ERR_NOT_FOUND("BRAND_NF", "Not found brand with id", HttpStatus.BAD_REQUEST),
+
+    //----------- COLLECTION ------------
+    COLLECTION_ERR_GET("COLLECTION-GA", "Have error in process get collection", HttpStatus.BAD_REQUEST),
+    COLLECTION_ERR_DEL_EM("COLLECTION-DL-E", "List ids of collection to delete is empty", HttpStatus.BAD_REQUEST),
+    COLLECTION_DATA_EXISTED("COLLECTION-DTE", "Data collection exit", HttpStatus.CONFLICT),
+    COLLECTION_ERR_NOT_FOUND("COLLECTION_NF", "Not found collection with id", HttpStatus.BAD_REQUEST),
+
+    //----------- MATERIAL ------------
+    MATERIAL_ERR_GET("MATERIAL-GA", "Have error in process get material", HttpStatus.BAD_REQUEST),
+    MATERIAL_ERR_DEL_EM("MATERIAL-DL-E", "List ids of brand to delete is empty", HttpStatus.BAD_REQUEST),
+    MATERIAL_DATA_EXISTED("MATERIAL-DTE", "Data material exit", HttpStatus.CONFLICT),
+    MATERIAL_ERR_NOT_FOUND("MATERIAL_NF", "Not found material with id", HttpStatus.BAD_REQUEST),
 
 
     INTERNAL_ERROR("ACC-S-999", "Unexpected internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
