@@ -55,8 +55,9 @@ public class ProductEntity {
     @JoinColumn(name = "sub_category_id")
     private SubCategoryEntity subCategory; // T-shirt / Shorts / Sports Bra...
 
-    @Column(length = 100)
-    private String collection; // Apex / Vital / Legacy...
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "collection_id")
+    private CollectionEntity collection; // Apex / Vital / Legacy...
 
     @Column(name ="base_price")
     private BigDecimal basePrice; // Giá gốc + float và double là kiểu số dấu phẩy động (floating-point) vd 0.30000000000000004 != 0.3
@@ -66,7 +67,9 @@ public class ProductEntity {
 
     private String origin; // Xuất xứ (UK, Vietnam...)
 
-    private String material; // Polyester, Cotton, Nylon...
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id")
+    private MaterialEntity material; // Polyester, Cotton, Nylon...
 
     @Column(name ="fit_type")
     private String fitType; // Slim fit, Regular fit...

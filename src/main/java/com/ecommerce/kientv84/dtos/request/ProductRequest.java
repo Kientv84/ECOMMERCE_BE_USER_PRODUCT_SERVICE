@@ -33,13 +33,13 @@ public class ProductRequest {
 
     private String description;
 
-    private String collection;
+    private UUID collection;
 
     private Float discountPercent;
 
     private String origin;
 
-    private String material;
+    private UUID material;
 
     private String fitType;
 
@@ -50,4 +50,5 @@ public class ProductRequest {
     private Double ratingAverage;
 
     private Integer ratingCount;
+
 }

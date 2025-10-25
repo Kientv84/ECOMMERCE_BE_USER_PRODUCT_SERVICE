@@ -43,8 +43,8 @@ public class MaterialEntity {
     private String status; // ACTIVE / INACTIVE
 
     // ====== Quan hệ với Product ======
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<ProductEntity> products;
+    @OneToOne(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = false)
+    private ProductEntity product;
 
     // ====== Metadata ======
     @CreatedDate

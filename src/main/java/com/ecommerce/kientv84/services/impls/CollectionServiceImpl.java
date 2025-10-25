@@ -111,6 +111,8 @@ public class CollectionServiceImpl implements CollectionService {
 
             List<CollectionEntity> foundIds = collectionRepository.findAllById(uuids);
 
+            System.out.println("Find collection:" + foundIds.toString());
+
             if ( foundIds.isEmpty()) {
                 throw new ServiceException(EnumError.COLLECTION_ERR_NOT_FOUND, "collection.delete.notfound");
             }

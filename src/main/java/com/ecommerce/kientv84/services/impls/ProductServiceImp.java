@@ -5,16 +5,10 @@ import com.ecommerce.kientv84.commons.StatusEnum;
 import com.ecommerce.kientv84.dtos.request.ProductRequest;
 import com.ecommerce.kientv84.dtos.request.ProductUpdateRequest;
 import com.ecommerce.kientv84.dtos.response.ProductResponse;
-import com.ecommerce.kientv84.entites.BrandEntity;
-import com.ecommerce.kientv84.entites.CategoryEntity;
-import com.ecommerce.kientv84.entites.ProductEntity;
-import com.ecommerce.kientv84.entites.SubCategoryEntity;
+import com.ecommerce.kientv84.entites.*;
 import com.ecommerce.kientv84.exceptions.ServiceException;
 import com.ecommerce.kientv84.mappers.ProductMapper;
-import com.ecommerce.kientv84.respositories.BrandRepository;
-import com.ecommerce.kientv84.respositories.CategoryRepository;
-import com.ecommerce.kientv84.respositories.ProductRepository;
-import com.ecommerce.kientv84.respositories.SubCategoryRepository;
+import com.ecommerce.kientv84.respositories.*;
 import com.ecommerce.kientv84.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +28,8 @@ public class ProductServiceImp implements ProductService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final BrandRepository brandRepository;
+    private final CollectionRepository collectionRepository;
+    private final MaterialRepository materialRepository;
     private final ProductMapper productMapper;
 
     @Override
@@ -63,6 +59,12 @@ public class ProductServiceImp implements ProductService {
             BrandEntity brand = brandRepository.findById(productRequest.getBrand())
                     .orElseThrow(() -> new ServiceException(EnumError.BRAND_ERR_GET, "brand.get.error"));
 
+            CollectionEntity collection = collectionRepository.findById(productRequest.getCollection())
+                    .orElseThrow(() -> new ServiceException(EnumError.COLLECTION_ERR_GET, "collection.get.error"));
+
+            MaterialEntity material = materialRepository.findById(productRequest.getMaterial())
+                    .orElseThrow(() -> new ServiceException(EnumError.MATERIAL_ERR_GET, "material.get.error"));
+
             ProductEntity productEntity = ProductEntity.builder()
                     .brand(brand)
                     .category(category)
@@ -70,7 +72,18 @@ public class ProductServiceImp implements ProductService {
                     .subCategory(subCategory)
                     .basePrice(productRequest.getBasePrice())
                     .status(productRequest.getStatus())
+                    .careInstruction(productRequest.getCareInstruction())
+                    .fitType(productRequest.getFitType())
+                    .description(productRequest.getDescription())
+                    .material(material)
+                    .collection(collection)
+                    .ratingCount(productRequest.getRatingCount())
+                    .careInstruction(productRequest.getCareInstruction())
                     .createdBy("ADMIN")
+                    .discountPercent(productRequest.getDiscountPercent())
+                    .origin(productRequest.getOrigin())
+                    .thumbnailUrl(productRequest.getThumbnailUrl())
+                    .ratingAverage(productRequest.getRatingAverage())
                     .createdDate(new Date())
                     .build();
 
@@ -85,7 +98,7 @@ public class ProductServiceImp implements ProductService {
             throw e;
         }
         catch (Exception e) {
-            throw new ServiceException(EnumError.PRO_ERR_GET, "product.get.error" );
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "product.get.error" );
         }
     }
 
@@ -134,6 +147,41 @@ public class ProductServiceImp implements ProductService {
             if ( updateData.getStatus() != null) {
                 productEntity.setStatus(productEntity.getStatus());
             }
+            if ( updateData.getCollection() != null) {
+                CollectionEntity collection = collectionRepository.findById(updateData.getCollection())
+                        .orElseThrow(() -> new ServiceException(EnumError.COLLECTION_ERR_GET, "collection.get.error"));
+            }
+            if ( updateData.getMaterial() != null) {
+                MaterialEntity material = materialRepository.findById(updateData.getMaterial())
+                        .orElseThrow(() -> new ServiceException(EnumError.MATERIAL_ERR_GET, "material.get.error"));
+            }
+            if ( updateData.getDescription() != null) {
+                productEntity.setDescription(updateData.getDescription());
+            }
+            if (updateData.getStatus() != null) {
+                productEntity.setStatus(updateData.getStatus());
+            }
+            if (updateData.getBasePrice() != null) {
+                productEntity.setBasePrice(updateData.getBasePrice());
+            }
+            if (updateData.getDescription() != null) {
+                productEntity.setDescription(updateData.getDescription());
+            }
+            if (updateData.getCareInstruction() != null) {
+                productEntity.setCareInstruction(updateData.getCareInstruction());
+            }
+            if (updateData.getCode() != null) {
+                productEntity.setProductCode(updateData.getCode());
+            }
+            if (updateData.getFitType() != null) {
+                productEntity.setFitType(updateData.getFitType());
+            }
+            if (updateData.getRatingAverage() != null) {
+                productEntity.setRatingAverage(updateData.getRatingAverage());
+            }
+            if (updateData.getThumbnailUrl() != null) {
+                productEntity.setThumbnailUrl(updateData.getThumbnailUrl());
+            }
 
             String name = generateNameProduct(productEntity);
 
@@ -147,7 +195,7 @@ public class ProductServiceImp implements ProductService {
         } catch (ServiceException e) {
             throw e;
         } catch (Exception e) {
-            throw new ServiceException(EnumError.INTERNAL_ERROR, "ACC-S-99");
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "sys.internal.error");
         }
     }
 

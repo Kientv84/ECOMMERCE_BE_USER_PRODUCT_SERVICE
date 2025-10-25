@@ -10,5 +10,7 @@ public interface ProductMapper {
     @Mapping(source = "brand.id", target = "brand")
     @Mapping(source = "category.id", target = "category")
     @Mapping(source = "subCategory.id", target = "subCategory")
+    @Mapping(source = "collection.id", target = "collection")
+    @Mapping(source = "material.id", target = "material")
     ProductResponse mapToProductResponse(ProductEntity productEntity);
 }
