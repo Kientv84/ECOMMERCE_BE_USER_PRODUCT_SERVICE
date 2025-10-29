@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ProductRequest {
 
     @NotNull(message =  "{product.productCode.notnul}")
-    private String code;
+    private String productCode;
 
     @NotNull(message =  "{product.brand.notnul}")
     private UUID brand;
@@ -34,6 +34,8 @@ public class ProductRequest {
     private String description;
 
     private UUID collection;
+
+    private Integer stock;
 
     private Float discountPercent;
 

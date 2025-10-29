@@ -1,9 +1,6 @@
 package com.ecommerce.kientv84.dtos.response;
 
-import com.ecommerce.kientv84.entites.BrandEntity;
-import com.ecommerce.kientv84.entites.CategoryEntity;
-
-import com.ecommerce.kientv84.entites.SubCategoryEntity;
+import com.ecommerce.kientv84.dtos.response.objectRes.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,16 +15,17 @@ public class ProductResponse {
     private UUID id;
     private String productName;
     private String productCode;
-    private UUID brand;
-    private UUID category;
-    private UUID subCategory;
+    private BrandObjectResponse brand;
+    private CategoryObjectResponse category;
+    private SubCategoryObjectResponse subCategory;
     private BigDecimal basePrice;
     private String status;
     private String description;
-    private String collection;
+    private CollectionObjectResponse collection;
     private Float discountPercent;
     private String origin;
-    private String material;
+    private MaterialObjectResponse material;
+    private Integer stock;
     private String fitType;
     private String careInstruction;
     private String thumbnailUrl;

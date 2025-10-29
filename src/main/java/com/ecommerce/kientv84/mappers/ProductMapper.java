@@ -1,16 +1,21 @@
 package com.ecommerce.kientv84.mappers;
 
 import com.ecommerce.kientv84.dtos.response.ProductResponse;
-import com.ecommerce.kientv84.entites.ProductEntity;
+import com.ecommerce.kientv84.dtos.response.objectRes.*;
+import com.ecommerce.kientv84.entites.*;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    @Mapping(source = "brand.id", target = "brand")
-    @Mapping(source = "category.id", target = "category")
-    @Mapping(source = "subCategory.id", target = "subCategory")
-    @Mapping(source = "collection.id", target = "collection")
-    @Mapping(source = "material.id", target = "material")
     ProductResponse mapToProductResponse(ProductEntity productEntity);
+
+    BrandObjectResponse mapToProductBrandResponse(BrandEntity brandEntity);
+
+    CategoryObjectResponse mapToProductCategoryResponse(CategoryEntity categoryEntity);
+
+    SubCategoryObjectResponse mapToProductSubCategoryResponse(SubCategoryEntity subCategoryEntity);
+
+    CollectionObjectResponse mapToProductCollectionResponse(CollectionEntity collection);
+
+    MaterialObjectResponse mapToProductMaterialResponse(MaterialEntity materialEntity);
 }

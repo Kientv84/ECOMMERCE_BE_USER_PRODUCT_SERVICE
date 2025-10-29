@@ -77,6 +77,9 @@ public class ProductEntity {
     @Column(name ="care_instruction")
     private String careInstruction; // "Machine wash cold", ...
 
+    @Column(name ="count_in_stock")
+    private Integer stock;
+
     private String status; // ACTIVE, INACTIVE, OUT_OF_STOCK
 
     @Column(name ="thumbnail_url")

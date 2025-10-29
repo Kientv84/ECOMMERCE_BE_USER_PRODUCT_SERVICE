@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductUpdateRequest {
     private UUID brand;
-    private String code;
+    private String productCode;
     private UUID category;
     private UUID subCategory;
     private BigDecimal basePrice;
@@ -24,6 +24,7 @@ public class ProductUpdateRequest {
     private Float discountPercent;
     private String origin;
     private String fitType;
+    private Integer stock;
     private String careInstruction;
     private String thumbnailUrl;
     private Double ratingAverage;

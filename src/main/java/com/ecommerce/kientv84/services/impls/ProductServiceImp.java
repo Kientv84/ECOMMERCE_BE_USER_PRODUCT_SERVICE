@@ -1,7 +1,6 @@
 package com.ecommerce.kientv84.services.impls;
 
 import com.ecommerce.kientv84.commons.EnumError;
-import com.ecommerce.kientv84.commons.StatusEnum;
 import com.ecommerce.kientv84.dtos.request.ProductRequest;
 import com.ecommerce.kientv84.dtos.request.ProductUpdateRequest;
 import com.ecommerce.kientv84.dtos.response.ProductResponse;
@@ -68,13 +67,14 @@ public class ProductServiceImp implements ProductService {
             ProductEntity productEntity = ProductEntity.builder()
                     .brand(brand)
                     .category(category)
-                    .productCode(productRequest.getCode())
+                    .productCode(productRequest.getProductCode())
                     .subCategory(subCategory)
                     .basePrice(productRequest.getBasePrice())
                     .status(productRequest.getStatus())
                     .careInstruction(productRequest.getCareInstruction())
                     .fitType(productRequest.getFitType())
                     .description(productRequest.getDescription())
+                    .stock(productRequest.getStock())
                     .material(material)
                     .collection(collection)
                     .ratingCount(productRequest.getRatingCount())
@@ -170,8 +170,8 @@ public class ProductServiceImp implements ProductService {
             if (updateData.getCareInstruction() != null) {
                 productEntity.setCareInstruction(updateData.getCareInstruction());
             }
-            if (updateData.getCode() != null) {
-                productEntity.setProductCode(updateData.getCode());
+            if (updateData.getProductCode() != null) {
+                productEntity.setProductCode(updateData.getProductCode());
             }
             if (updateData.getFitType() != null) {
                 productEntity.setFitType(updateData.getFitType());
@@ -181,6 +181,9 @@ public class ProductServiceImp implements ProductService {
             }
             if (updateData.getThumbnailUrl() != null) {
                 productEntity.setThumbnailUrl(updateData.getThumbnailUrl());
+            }
+            if (updateData.getStock() != null) {
+                productEntity.setStock(updateData.getStock());
             }
 
             String name = generateNameProduct(productEntity);

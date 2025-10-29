@@ -2,7 +2,6 @@ package com.ecommerce.kientv84.controller;
 
 import com.ecommerce.kientv84.dtos.request.ProductRequest;
 import com.ecommerce.kientv84.dtos.request.ProductUpdateRequest;
-import com.ecommerce.kientv84.dtos.request.UserRequest;
 import com.ecommerce.kientv84.dtos.response.ProductResponse;
 import com.ecommerce.kientv84.services.ProductService;
 import jakarta.validation.Valid;
