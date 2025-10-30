@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController //toàn bộ method trong class sẽ tự động trả về JSON, còn @Controller là được hiểu là trang web thuần html css
 // Trong @RestController bao gồm @ResponseBody (ngầm) ==> Sẽ tự động trả về các status vd 2xx 4xx
@@ -31,18 +32,18 @@ public class UserController {
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getById(id));
     }
 
 
     @PostMapping("/account/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest updatedData) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @Valid @RequestBody UserUpdateRequest updatedData) {
         return ResponseEntity.ok(userService.updateUser(id, updatedData));
     }
 
     @PostMapping("/accounts")
-    public ResponseEntity<String> deleteUser( @RequestBody List<Long> ids) {
+    public ResponseEntity<String> deleteUser( @RequestBody List<UUID> ids) {
         return ResponseEntity.ok(userService.deleteUser(ids));
     }
 

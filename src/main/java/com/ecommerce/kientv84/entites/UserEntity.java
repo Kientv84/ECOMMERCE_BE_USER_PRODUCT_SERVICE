@@ -7,8 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,12 +23,14 @@ import java.util.Date;
 @Entity
 @Builder
 @Table(name = "user_entity")
+@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
+    private UUID id;
 
     @Column(name = "user_code", unique = true, length = 50)
     private String userCode;
@@ -61,19 +70,24 @@ public class UserEntity {
     @Column(name = "user_avatar")
     private String userAvatar;
 
-    @Column(name = "created_by", length = 100)
-    private String createdBy;
-
-    @Column(name = "created_date", updatable = false)
+    // ====== Metadata ======
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = "updated_by", length = 100)
-    private String updatedBy;
-
-    @Column(name = "updated_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    @Column(name = "updated_date")
     private Date updatedDate;
+
+    @CreatedBy
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(name = "updated_by")
+    private String updatedBy;
 
 //    // Khi thao tác user dưới DB (vd: xóa) thì employee cũng bị ảnh hưởng theo cascade
 //    @OneToOne(mappedBy = "systemUser", cascade = CascadeType.ALL)

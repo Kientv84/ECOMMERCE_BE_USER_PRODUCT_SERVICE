@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserResponse getById(Long id) {
+    public UserResponse getById(UUID id) {
         try {
             UserEntity user = userRepository.findById(id)
                     .orElseThrow(() -> new ServiceException(EnumError.ACC_ERR_GET, "user.not.found", new Object[]{id}));
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserResponse updateUser(Long id, UserUpdateRequest updatedData) {
+    public UserResponse updateUser(UUID id, UserUpdateRequest updatedData) {
         try {
             UserEntity user = userRepository.findById(id)
                     .orElseThrow(() -> new ServiceException(EnumError.ACC_ERR_GET, "user.not.found", new Object[]{id}));
@@ -131,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String deleteUser(List<Long> ids) {
+    public String deleteUser(List<UUID> ids) {
         try {
             if (ids == null || ids.isEmpty()) {
                 throw new ServiceException(
@@ -142,11 +143,11 @@ public class UserServiceImpl implements UserService {
             }
 
             List<UserEntity> users = userRepository.findAllById(ids);
-            Set<Long> foundIds = users.stream()
+            Set<UUID> foundIds = users.stream()
                     .map(UserEntity::getId)
                     .collect(Collectors.toSet());
 
-            List<Long> notFoundIds = ids.stream()
+            List<UUID> notFoundIds = ids.stream()
                     .filter(id -> !foundIds.contains(id))
                     .toList();
 
