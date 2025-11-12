@@ -7,6 +7,7 @@ import com.ecommerce.kientv84.dtos.response.ProductResponse;
 import com.ecommerce.kientv84.entites.*;
 import com.ecommerce.kientv84.exceptions.ServiceException;
 import com.ecommerce.kientv84.mappers.ProductMapper;
+import com.ecommerce.kientv84.messaging.producers.ProductProducer;
 import com.ecommerce.kientv84.respositories.*;
 import com.ecommerce.kientv84.services.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class ProductServiceImp implements ProductService {
     private final CollectionRepository collectionRepository;
     private final MaterialRepository materialRepository;
     private final ProductMapper productMapper;
+    private final ProductProducer productProducer;
 
     @Override
     public List<ProductResponse> getAllProduct() {
@@ -92,6 +94,9 @@ public class ProductServiceImp implements ProductService {
             productEntity.setProductName(generatedName);
 
             productRepository.save(productEntity);
+
+            // Product kafka tạo tồn kho
+            productProducer.produceInventoryCreate(productMapper.mapToKafkaInventoryRequest(productEntity));
 
             return productMapper.mapToProductResponse(productEntity);
         } catch (ServiceException e) {
@@ -181,9 +186,6 @@ public class ProductServiceImp implements ProductService {
             }
             if (updateData.getThumbnailUrl() != null) {
                 productEntity.setThumbnailUrl(updateData.getThumbnailUrl());
-            }
-            if (updateData.getStock() != null) {
-                productEntity.setStock(updateData.getStock());
             }
 
             String name = generateNameProduct(productEntity);
