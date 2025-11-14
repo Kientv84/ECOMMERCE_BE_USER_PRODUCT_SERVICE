@@ -42,9 +42,9 @@ public class MaterialEntity {
     @Column(name = "status", length = 50)
     private String status; // ACTIVE / INACTIVE
 
-    // ====== Quan hệ với Product ======
-    @OneToOne(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = false)
-    private ProductEntity product;
+    // ===== Quan hệ với Product =====
+    @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductEntity> products;
 
     // ====== Metadata ======
     @CreatedDate

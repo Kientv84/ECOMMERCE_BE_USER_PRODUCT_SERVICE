@@ -67,9 +67,9 @@ public class ProductEntity {
 
     private String origin; // Xuất xứ (UK, Vietnam...)
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id")
-    private MaterialEntity material; // Polyester, Cotton, Nylon...
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id") // Một material có thể dùng cho nhiều product
+    private MaterialEntity material;
 
     @Column(name ="fit_type")
     private String fitType; // Slim fit, Regular fit...

@@ -42,7 +42,7 @@ public class ProductServiceImp implements ProductService {
             return items;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Have eror", e);
             throw new ServiceException(EnumError.PRO_ERR_GET, "product.get.error" );
         }
     }
