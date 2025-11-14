@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -35,20 +36,16 @@ public class RoleEntity {
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP) // Đánh dấu anotation temporal ánh xạ dữ liệu kiểu date (dd/mm/yy)
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @Column(name = "update_by", length = 500)
     private String updateBy;
 
     @Column(name = "update_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)  //ascade = CascadeType.ALL cho phép thao tác trên SystemRole sẽ tự lan sang SystemUser
-    @JsonManagedReference //là phần "được giữ lại".
-    //, dùng để xử lý quan hệ hai chiều (bi-directional) trong JSON serialization bằng thư viện Jackson (dùng trong Spring Boot).
-
-    // @JsonIgnore: sd để thư viện serialize JSON mặc định trong Spring Boot) không serialize trường users trong SystemRole.
     private List<UserEntity> users;
 }
 

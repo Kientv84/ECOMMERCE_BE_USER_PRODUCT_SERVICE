@@ -1,6 +1,7 @@
 package com.ecommerce.kientv84.entites;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,9 +29,8 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
+    @GeneratedValue
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Column(name = "user_code", unique = true, length = 50)
@@ -54,13 +55,11 @@ public class UserEntity {
     @Column(name = "user_email", unique = true, length = 100)
     private String userEmail;
 
-    // Nhiều người dùng (SystemUser) có thể thuộc 1 vai trò (SystemRole).
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference // đánh dấu đây là phần "bị bỏ qua"
-    // FetchType.LAZY: chỉ truy vấn vai trò khi gọi getSystemRole()
     @JoinColumn(name = "role_id") // foreign key đến bảng System_Role
     private RoleEntity role;
 
+    @JsonIgnore
     @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
 
@@ -74,12 +73,12 @@ public class UserEntity {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_date")
-    private Date updatedDate;
+    private LocalDateTime updatedDate;
 
     @CreatedBy
     @Column(name = "created_by")

@@ -2,29 +2,30 @@ package com.ecommerce.kientv84.services.impls;
 
 import com.ecommerce.kientv84.commons.EnumError;
 import com.ecommerce.kientv84.commons.StatusEnum;
-import com.ecommerce.kientv84.commons.SuccessEnum;
 import com.ecommerce.kientv84.dtos.request.UserRequest;
 import com.ecommerce.kientv84.dtos.request.UserUpdateRequest;
+import com.ecommerce.kientv84.dtos.request.search.UserSearchRequest;
+import com.ecommerce.kientv84.dtos.response.PagedResponse;
 import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.RoleEntity;
 import com.ecommerce.kientv84.entites.UserEntity;
-import com.ecommerce.kientv84.dtos.response.ResponeResult;
 import com.ecommerce.kientv84.exceptions.ServiceException;
 import com.ecommerce.kientv84.mappers.UserMapper;
 import com.ecommerce.kientv84.respositories.RoleRepository;
 import com.ecommerce.kientv84.respositories.UserRepository;
 import com.ecommerce.kientv84.services.UserService;
-import jakarta.websocket.EncodeException;
+import com.ecommerce.kientv84.utils.PageableUtils;
+import com.ecommerce.kientv84.utils.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -40,18 +41,44 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     @Override
-    public List<UserResponse> getAllUser() {
-        System.out.println("Get all user api calling ...");
+    public PagedResponse<UserResponse> searchUsers(UserSearchRequest req) {
+        log.info("Get all user api calling ...");
+
         try {
+            List<String> allowedFields = List.of("userName", "createdDate");
 
-            List<UserResponse> accounts = userRepository.findAll().stream().map(acc -> userMapper.mapToUserResponse(acc)).toList();
+            PageRequest pageRequest = PageableUtils.buildPageRequest(
+                    req.getPage(),
+                    req.getSize(),
+                    req.getSort(),
+                    allowedFields,
+                    "createdDate",
+                    Sort.Direction.DESC
+            );
 
-            return accounts;
+            Specification<UserEntity> spec = new SpecificationBuilder<UserEntity>()
+                    .equal("status", req.getStatus())
+                    .equal("role.id", req.getRoleId())
+                    .likeIgnoreCase("userName", req.getQ())
+                    .likeIgnoreCase("userEmail", req.getQ())
+                    .build();
+
+
+            Page<UserResponse> result = userRepository.findAll(spec, pageRequest)
+                    .map(userMapper::mapToUserResponse);
+
+            return new PagedResponse<>(
+                    result.getNumber(),
+                    result.getSize(),
+                    result.getTotalElements(),
+                    result.getTotalPages(),
+                    result.getContent()
+            );
 
         } catch (ServiceException e) {
             throw e;
         } catch (Exception e) {
-            throw new ServiceException(EnumError.ACC_ERR_GET, "ACC-S-999");
+            throw new ServiceException(EnumError.ACC_ERR_GET, "ACC-S-999", new Object[]{e.getMessage()});
         }
     }
 

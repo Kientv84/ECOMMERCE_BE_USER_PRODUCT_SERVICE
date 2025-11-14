@@ -2,29 +2,33 @@ package com.ecommerce.kientv84.controller;
 
 import com.ecommerce.kientv84.dtos.request.UserRequest;
 import com.ecommerce.kientv84.dtos.request.UserUpdateRequest;
+import com.ecommerce.kientv84.dtos.request.search.UserSearchRequest;
+import com.ecommerce.kientv84.dtos.response.PagedResponse;
 import com.ecommerce.kientv84.dtos.response.UserResponse;
 import com.ecommerce.kientv84.entites.UserEntity;
 import com.ecommerce.kientv84.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-@RestController //toàn bộ method trong class sẽ tự động trả về JSON, còn @Controller là được hiểu là trang web thuần html css
-// Trong @RestController bao gồm @ResponseBody (ngầm) ==> Sẽ tự động trả về các status vd 2xx 4xx
+@RestController
 @RequestMapping("/v1/api")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/accounts")
-    public ResponseEntity<List<UserResponse>> getAllUser() {
-        return ResponseEntity.ok(userService.getAllUser());
+    @PostMapping("/accounts/filter")
+    public ResponseEntity<PagedResponse<UserResponse>> searchUsers(@RequestBody UserSearchRequest req) {
+        return ResponseEntity.ok(userService.searchUsers(req));
     }
+
 
     @PostMapping("/account")
     public ResponseEntity<UserResponse> createUser( @Valid  @RequestBody UserRequest user) {

@@ -1,6 +1,7 @@
 -- ======================================
 -- V1__create_tables.sql
 -- ======================================
+CREATE EXTENSION IF NOT EXISTS unaccent;
 
 CREATE TABLE IF NOT EXISTS role_entity (
     id BIGSERIAL PRIMARY KEY,
@@ -130,3 +131,32 @@ CREATE TABLE IF NOT EXISTS product_entity (
 CREATE INDEX IF NOT EXISTS idx_product_category ON product_entity (category_id);
 CREATE INDEX IF NOT EXISTS idx_product_brand ON product_entity (brand_id);
 CREATE INDEX IF NOT EXISTS idx_product_status ON product_entity (status);
+
+-- 1. Thêm cột tsvector
+ALTER TABLE user_entity
+ADD COLUMN document_tsv tsvector;
+
+-- 2. Cập nhật dữ liệu hiện có
+UPDATE user_entity
+SET document_tsv = to_tsvector(
+    'simple',
+    coalesce(user_name,'') || ' ' || coalesce(user_email,'') || ' ' || coalesce(user_phone_number,'')
+);
+
+-- 3. Tạo GIN index để search nhanh
+CREATE INDEX idx_user_document_tsv ON user_entity USING GIN(document_tsv);
+
+-- 4. Tạo function trigger để cập nhật tự động khi insert/update
+CREATE FUNCTION user_tsv_trigger() RETURNS trigger AS $$
+BEGIN
+    NEW.document_tsv := to_tsvector(
+        'simple',
+        coalesce(NEW.user_name,'') || ' ' || coalesce(NEW.user_email,'') || ' ' || coalesce(NEW.user_phone_number,'')
+    );
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+-- 5. Tạo trigger gắn vào bảng
+CREATE TRIGGER tsvectorupdate_user BEFORE INSERT OR UPDATE
+ON user_entity FOR EACH ROW EXECUTE PROCEDURE user_tsv_trigger();

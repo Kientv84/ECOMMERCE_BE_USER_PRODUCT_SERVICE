@@ -42,8 +42,12 @@ VALUES (
     'ACTIVE',
     'admin',
     'admin'
-)
-ON CONFLICT DO NOTHING;
+),('USER002', 'Kien1', '2002-11-15', 'Nam', '0968000001', '268/23 Lê Văn Việt, Tăng Nhơn Phú B, Quận 9, TP.HCM', 'kien1@example.com', (SELECT id FROM role_entity WHERE role_name = 'ROLE_ADMIN' LIMIT 1), '$2a$10$j0xNytrAvZkRCwf2XPzChe9bH5LsEqdyGmxsYF7GvN4WMF.C9WyNu', 'ACTIVE', 'admin', 'admin'),
+  ('USER003', 'Kien2', '2002-11-15', 'Nam', '0968000002', '268/23 Lê Văn Việt, Tăng Nhơn Phú B, Quận 9, TP.HCM', 'kien2@example.com', (SELECT id FROM role_entity WHERE role_name = 'ROLE_ADMIN' LIMIT 1), '$2a$10$j0xNytrAvZkRCwf2XPzChe9bH5LsEqdyGmxsYF7GvN4WMF.C9WyNu', 'ACTIVE', 'admin', 'admin'),
+  ('USER004', 'Kien3', '2002-11-15', 'Nam', '0968000003', '268/23 Lê Văn Việt, Tăng Nhơn Phú B, Quận 9, TP.HCM', 'kien3@example.com', (SELECT id FROM role_entity WHERE role_name = 'ROLE_ADMIN' LIMIT 1), '$2a$10$j0xNytrAvZkRCwf2XPzChe9bH5LsEqdyGmxsYF7GvN4WMF.C9WyNu', 'ACTIVE', 'admin', 'admin'),
+  ('USER005', 'Kien4', '2002-11-15', 'Nam', '0968000004', '268/23 Lê Văn Việt, Tăng Nhơn Phú B, Quận 9, TP.HCM', 'kien4@example.com', (SELECT id FROM role_entity WHERE role_name = 'ROLE_ADMIN' LIMIT 1), '$2a$10$j0xNytrAvZkRCwf2XPzChe9bH5LsEqdyGmxsYF7GvN4WMF.C9WyNu', 'ACTIVE', 'admin', 'admin'),
+  ('USER006', 'Kien5', '2002-11-15', 'Nam', '0968000005', '268/23 Lê Văn Việt, Tăng Nhơn Phú B, Quận 9, TP.HCM', 'kien5@example.com', (SELECT id FROM role_entity WHERE role_name = 'ROLE_ADMIN' LIMIT 1), '$2a$10$j0xNytrAvZkRCwf2XPzChe9bH5LsEqdyGmxsYF7GvN4WMF.C9WyNu', 'ACTIVE', 'admin', 'admin')
+ON CONFLICT (user_email) DO NOTHING;
 
 -- 3. Thêm dữ liệu mẫu cho bảng brand_entity
 INSERT INTO brand_entity (
@@ -170,3 +174,9 @@ VALUES (
 )
 ON CONFLICT DO NOTHING;
 
+-- Cập nhật cột document_tsv cho user_entity sau khi insert dữ liệu mẫu
+UPDATE user_entity
+SET document_tsv = to_tsvector(
+    'simple',
+    coalesce(user_name,'') || ' ' || coalesce(user_email,'') || ' ' || coalesce(user_phone_number,'')
+);
