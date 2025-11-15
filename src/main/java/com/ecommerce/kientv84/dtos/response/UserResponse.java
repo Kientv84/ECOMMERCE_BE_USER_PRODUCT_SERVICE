@@ -12,7 +12,7 @@ import java.util.UUID;
 public class UserResponse {
     private UUID id;
     private String userName;
-    private String userPassword;
+    private String status;
     private String userEmail;
     private String userPhoneNumber;
 

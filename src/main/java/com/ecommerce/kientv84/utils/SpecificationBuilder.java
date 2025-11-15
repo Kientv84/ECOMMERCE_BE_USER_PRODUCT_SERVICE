@@ -47,6 +47,31 @@ public class SpecificationBuilder<T> {
         return this;
     }
 
+    /**
+     * Tìm kiếm LIKE trên nhiều field, nối bằng OR
+     */
+    public SpecificationBuilder<T> likeAnyFieldIgnoreCase(String value, String... fields) {
+        if (value != null && !value.isEmpty() && fields.length > 0) {
+            String normalized = removeAccent(value.toLowerCase());
+
+            Specification<T> spec = null;
+
+            for (String field : fields) {
+                Specification<T> fieldSpec = (root, query, cb) -> {
+                    Path<String> path = root.get(field);
+                    Expression<String> dbField = cb.function("unaccent", String.class, cb.lower(path));
+                    return cb.like(dbField, "%" + normalized + "%");
+                };
+
+                spec = (spec == null) ? fieldSpec : spec.or(fieldSpec); // OR giữa các field
+            }
+
+            specs.add(spec);
+        }
+        return this;
+    }
+
+
     public SpecificationBuilder<T> custom(Specification<T> spec) {
         if (spec != null) {
             specs.add(spec);

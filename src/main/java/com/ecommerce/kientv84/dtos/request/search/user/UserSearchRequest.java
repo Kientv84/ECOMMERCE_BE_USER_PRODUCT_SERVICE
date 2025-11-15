@@ -14,5 +14,11 @@ public class UserSearchRequest {
     private String q; // search text: name, email
     private String status;
     private Long roleId;
+
+    public String hashKey() {
+        return (page + "-" + size + "-" + q + "-" + status + "-" + roleId + "-" + sort)
+                .replace("null", "");
+    }
+
 }
 
