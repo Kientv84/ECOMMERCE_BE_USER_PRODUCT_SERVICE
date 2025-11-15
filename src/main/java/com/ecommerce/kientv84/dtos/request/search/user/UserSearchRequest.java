@@ -1,24 +1,17 @@
-package com.ecommerce.kientv84.dtos.request.search;
+package com.ecommerce.kientv84.dtos.request.search.user;
 
 import lombok.*;
 
-import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserSearchRequest {
-    private Integer page = 0;
-    private Integer size = 10;
-    private String sort = "createdDate,desc"; // format: field,asc|desc
-    private String q; // search text: name, email
-    private String status;
-    private Long roleId;
+    private UserSearchOption searchOption = new UserSearchOption();
+    private UserSearchModel searchModel = new UserSearchModel();
 
     public String hashKey() {
-        return (page + "-" + size + "-" + q + "-" + status + "-" + roleId + "-" + sort)
-                .replace("null", "");
+        return "option:" + searchOption.hashKey() + "|filter:" + searchModel.hashKey();
     }
-
 }
-
