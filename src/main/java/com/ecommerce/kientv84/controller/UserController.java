@@ -2,20 +2,16 @@ package com.ecommerce.kientv84.controller;
 
 import com.ecommerce.kientv84.dtos.request.UserRequest;
 import com.ecommerce.kientv84.dtos.request.UserUpdateRequest;
-import com.ecommerce.kientv84.dtos.request.search.UserSearchRequest;
+import com.ecommerce.kientv84.dtos.request.search.user.UserSearchRequest;
 import com.ecommerce.kientv84.dtos.response.PagedResponse;
 import com.ecommerce.kientv84.dtos.response.UserResponse;
-import com.ecommerce.kientv84.entites.UserEntity;
 import com.ecommerce.kientv84.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -27,6 +23,12 @@ public class UserController {
     @PostMapping("/accounts/filter")
     public ResponseEntity<PagedResponse<UserResponse>> searchUsers(@RequestBody UserSearchRequest req) {
         return ResponseEntity.ok(userService.searchUsers(req));
+    }
+
+    @GetMapping("/accounts/suggestion")
+    public ResponseEntity<List<UserResponse>> getUserSuggestions(@RequestParam String q,
+                                                                 @RequestParam(defaultValue = "5") int limit) {
+        return ResponseEntity.ok(userService.searchUserSuggestion(q, limit));
     }
 
 
@@ -47,7 +49,7 @@ public class UserController {
     }
 
     @PostMapping("/accounts")
-    public ResponseEntity<String> deleteUser( @RequestBody List<UUID> ids) {
+    public ResponseEntity<String> deleteUser(@RequestBody List<UUID> ids) {
         return ResponseEntity.ok(userService.deleteUser(ids));
     }
 
